@@ -25,3 +25,4 @@ Thumbs.db
 
 # 테스트 관련
 coverage/
+next.config.ts
