@@ -1,34 +1,50 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { RssService } from '@/collector/rss/rss.service';
+import { ArticleService } from '@/article/article.service';
 import { rssFeedsMap } from '@/shared/constants/rss-feeds.constant';
 
 @Injectable()
 export class RssJobService {
     private readonly logger = new Logger(RssJobService.name);
-    private readonly feedEntries = Object.entries(rssFeedsMap); // [url, {meta}]
+    private readonly feedEntries = Object.entries(rssFeedsMap);
     private currentIndex = 0;
 
-    constructor(private readonly rssService: RssService) {}
+    constructor(
+        private readonly rssService: RssService,
+        private readonly articleService: ArticleService,
+    ) {}
 
     @Cron('*/30 * * * * *') // 30초마다 실행
-    async handleScheduledRss() {
+    async handleScheduledRss(): Promise<void> {
         const [url, meta] = this.feedEntries[this.currentIndex];
-        this.logger.log(`🌀 [${meta.source}] ${meta.category} RSS 호출 시작`);
+        this.logger.log(`🌐 [${meta.source}] ${meta.category} RSS 호출 시작`);
 
         const articles = await this.rssService.fetch(url, meta);
 
-        if (articles.length > 0) {
-            this.logger.log(`✅ ${articles.length}개 기사 수집됨`);
-            articles.slice(0, 3).forEach((article, i) => {
-                console.log(`📌 [${article.category}] ${article.title}`);
-                console.log(`    🕒 ${article.pubDate}`);
-                console.log(`    🔗 ${article.link}`);
-                console.log(`    📰 ${article.source} (${article.language})\n`);
+        let newCount = 0;
+        for (const article of articles) {
+            const saved = await this.articleService.saveIfNotExists({
+                title: article.title,
+                link: article.link,
+                pubDate: article.pubDate ? new Date(article.pubDate) : new Date(),
+                source: article.source,
+                category: article.category,
+                language: article.language,
+                url,
+                context: null,
             });
-        } else {
-            this.logger.warn(`⚠️ 기사 없음: ${meta.source} (${meta.category})`);
+
+            if (saved) {
+                newCount++;
+                this.logger.log(`✅ 저장됨: ${article.title}`);
+            } else {
+                this.logger.warn(`⛔ 중복 데이터: ${article.title}`);
+                break;
+            }
         }
+
+        this.logger.log(`📦 새로 저장된 기사 수: ${newCount}`);
 
         this.currentIndex = (this.currentIndex + 1) % this.feedEntries.length;
     }
