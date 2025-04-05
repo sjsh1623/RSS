@@ -229,14 +229,4 @@ export const rssFeedsMap: Record<string, { category: string; language: string; s
         "language": "ko",
         "source": "한국경제"
     },
-    "http://blog.rss.naver.com/{블로그ID}.xml": {
-        "category": "Uncategorized",
-        "language": "ko",
-        "source": "네이버 블로그"
-    },
-    "http://{블로그주소}/rss": {
-        "category": "Uncategorized",
-        "language": "ko",
-        "source": "티스토리 블로그"
-    }
 }

@@ -1,0 +1,28 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client" // 자동 생성됨
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // .env에서 로딩됨
+}
+
+model Feed {
+  id        Int      @id @default(autoincrement())
+  title     String
+  link      String?  // 원본 링크
+  linkHash  String   @unique  // ✅ 중복 체크용 해시
+  pubDate   DateTime
+  source    String
+  category  String
+  language  String
+  url       String   // RSS 원본 URL
+  context   String?  // 본문 (크롤링 or API)
+  createdAt DateTime @default(now())
+
+  @@index([category])
+  @@index([language])
+}
