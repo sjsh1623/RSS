@@ -1,13 +1,15 @@
-import {Module} from '@nestjs/common';
-import {SchedulerModule} from './scheduler/rss-job/scheduler.module';
-import {RssModule} from './collector/rss/rss.module';
-import {LlmModule} from './llm/llm.module';
-import {ArticleService} from './article/article.service';
-import {PrismaService} from './shared/prisma.service';
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule'; // ✅ 이거 꼭 필요
+import { SchedulerModule } from './scheduler/scheduler.module';
+import { RssModule } from './collector/rss/rss.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
-    imports: [SchedulerModule, RssModule, LlmModule, PrismaService],
-    providers: [ArticleService, PrismaService],
+    imports: [
+        ScheduleModule.forRoot(), // ✅ 반드시 루트 모듈에서 호출 필요
+        SchedulerModule,
+        RssModule,
+        ArticleModule,
+    ],
 })
-export class AppModule {
-}
+export class AppModule {}

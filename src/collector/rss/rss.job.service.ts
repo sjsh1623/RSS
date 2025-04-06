@@ -2,48 +2,42 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { RssService } from '@/collector/rss/rss.service';
 import { ArticleService } from '@/article/article.service';
-import { RssSourceService } from '@/source/rss/rss-source.service';
+import { RedisService } from '@/shared/redis.service';
 
 @Injectable()
 export class RssJobService implements OnModuleInit {
     private readonly logger = new Logger(RssJobService.name);
-    private feedEntries: { url: string; source: string; category: string; language: string }[] = [];
+    private feedEntries: [string, { source: string; category: string; language: string }][] = [];
     private currentIndex = 0;
 
     constructor(
         private readonly rssService: RssService,
         private readonly articleService: ArticleService,
-        private readonly rssSourceService: RssSourceService,
+        private readonly redisService: RedisService,
     ) {}
 
     async onModuleInit() {
-        const feeds = await this.rssSourceService.getSourcesFromCache();
-        if (!feeds || feeds.length === 0) {
-            this.logger.warn('🚨 Redis에 RSS Source 데이터가 없습니다.');
+        const feeds = await this.redisService.get('rss:sources');
+        if (!feeds) {
+            this.logger.warn('🚨 Redis에서 RSS Source 정보를 불러오지 못했습니다.');
             return;
         }
 
-        this.feedEntries = feeds.map(feed => ({
-            url: feed.url,
-            source: feed.source,
-            category: feed.category,
-            language: feed.language,
-        }));
-
-        this.logger.log(`📥 RSS Source ${this.feedEntries.length}개 캐시 로드 완료`);
+        this.feedEntries = Object.entries(feeds);
+        this.logger.log(`🔁 RSS 소스 ${this.feedEntries.length}개 로드 완료`);
     }
 
     @Cron('*/10 * * * * *') // 10초마다 실행
     async handleScheduledRss(): Promise<void> {
         if (this.feedEntries.length === 0) {
-            this.logger.warn('⚠️ RSS 소스가 없습니다. 캐시를 확인해주세요.');
+            this.logger.warn('⚠️ RSS 소스가 없습니다. Redis 초기화를 확인하세요.');
             return;
         }
 
-        const { url, source, category, language } = this.feedEntries[this.currentIndex];
-        this.logger.log(`🌐 [${source}] ${category} RSS 호출 시작`);
+        const [url, meta] = this.feedEntries[this.currentIndex];
+        this.logger.log(`🌐 [${meta.source}] ${meta.category} RSS 호출 시작`);
 
-        const articles = await this.rssService.fetch(url, { source, category, language });
+        const articles = await this.rssService.fetch(url, meta);
 
         let newCount = 0;
         for (const article of articles) {
