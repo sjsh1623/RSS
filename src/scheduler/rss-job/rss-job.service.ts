@@ -26,24 +26,23 @@ export class RssJobService implements OnModuleInit {
         this.feedEntries = feeds.map(feed => ({
             url: feed.url,
             source: feed.source,
-            category: feed.category,
             language: feed.language,
         }));
 
         this.logger.log(`📥 RSS Source ${this.feedEntries.length}개 캐시 로드 완료`);
     }
 
-    @Cron('*/10 * * * * *') // 10초마다 실행
+    @Cron('*/30 * * * * *') // 10초마다 실행
     async handleScheduledRss(): Promise<void> {
         if (this.feedEntries.length === 0) {
             this.logger.warn('⚠️ RSS 소스가 없습니다. 캐시를 확인해주세요.');
             return;
         }
 
-        const { url, source, category, language } = this.feedEntries[this.currentIndex];
-        this.logger.log(`🌐 [${source}] ${category} RSS 호출 시작`);
+        const { url, source, language } = this.feedEntries[this.currentIndex];
+        this.logger.log(`🌐 [${source}] } RSS 호출 시작`);
 
-        const articles = await this.rssService.fetch(url, { source, category, language });
+        const articles = await this.rssService.fetch(url, { source, language });
 
         let newCount = 0;
         for (const article of articles) {
@@ -52,7 +51,6 @@ export class RssJobService implements OnModuleInit {
                 link: article.link,
                 pubDate: article.pubDate ? new Date(article.pubDate) : new Date(),
                 source: article.source,
-                category: article.category,
                 language: article.language,
                 url,
                 context: null,

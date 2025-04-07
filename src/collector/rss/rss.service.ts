@@ -15,7 +15,7 @@ export class RssService {
     private readonly logger = new Logger(RssService.name);
     private readonly parser = new Parser();
 
-    async fetch(feedUrl: string, meta: { source: string; category: string; language: string }): Promise<ParsedArticle[]> {
+    async fetch(feedUrl: string, meta: { source: string; language: string }): Promise<ParsedArticle[]> {
         this.logger.log(`📡 [${meta.source}] RSS 수집 중: ${feedUrl}`);
 
         try {
@@ -25,7 +25,6 @@ export class RssService {
                 link: item.link ?? '',
                 pubDate: item.pubDate,
                 source: meta.source,
-                category: meta.category,
                 language: meta.language,
             }));
         } catch (error) {

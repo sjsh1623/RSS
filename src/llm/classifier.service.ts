@@ -1,9 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import {OllamaClient} from './ollama.client';
+import {GroqClient} from "@/llm/groq.client";
 
 @Injectable()
 export class ClassifierService {
-    constructor(private readonly ollama: OllamaClient) {
+    constructor(private readonly groq: GroqClient) {
     }
 
     async classifyAndSummarize(content: string): Promise<{
@@ -18,18 +18,18 @@ export class ClassifierService {
         사용 가능한 subcategory 목록 (예시): ["ai", "frontend", "investment", "mental_health", "job_hunting", "mobile_dev", "nutrition", "interior", "drama"]
         결과는 아래 형식으로 출력해줘:
         {
-          "category": "technology",
-          "subcategory": "ai",
-          "summary": "요약 2줄"
+          "category": "위 카테고리 목록중 하나",
+          "subcategory": "위 Subcategory 목록중 하나",
+          "summary": "요약 2줄 (한글)"
         }
 
         본문: ${content}`;
 
-        const raw = await this.ollama.ask(prompt);
+        const raw = await this.groq.ask(prompt);
 
         try {
-            const parsed = JSON.parse(raw);
-            return parsed;
+            console.log(raw)
+            return JSON.parse(raw);
         } catch (e) {
             console.error('JSON 파싱 실패:', raw);
             throw new Error('분류/요약 결과 파싱 실패');
