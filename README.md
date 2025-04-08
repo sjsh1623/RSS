@@ -86,6 +86,4 @@ nest generate module scheduler
 nest generate service scheduler/rss-job
 ```
 
-brew services start nginx
-brew services start postgresql
-ollama serve
+docker-compose exec backend npx prisma generate
