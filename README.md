@@ -87,3 +87,4 @@ nest generate service scheduler/rss-job
 ```
 
 docker-compose exec backend npx prisma generate
+docker-compose up --build

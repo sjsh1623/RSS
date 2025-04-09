@@ -2,19 +2,21 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres
-    env_file:
-      - .env
-    container_name: postgres
-    restart: always
+    image: ankane/pgvector:latest
+    ports:
+      - "4000:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: feeds
-    ports:
-      - "4000:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  embedding:
+    build:
+      context: ./embedding
+    ports:
+      - "8000:8000"
 
   redis:
     image: redis:7
@@ -37,9 +39,12 @@ services:
     depends_on:
       - postgres
       - redis
+      - embedding
     volumes:
       - .:/usr/src/app
-    command: npm run start:dev
+    command: >
+      sh -c "chmod +x ./scripts/wait-for-it.sh &&
+             ./scripts/wait-for-it.sh postgres:5432 -- npm run start:dev"
 
 volumes:
   pgdata:
