@@ -32,7 +32,8 @@ export class ArticleService {
             ...data,
             linkHash,
             category,
-            embedding
+            embedding,
+            context
         });
 
         return true;

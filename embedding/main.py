@@ -3,7 +3,9 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# ✅ BGE 모델로 교체
+model = SentenceTransformer('BAAI/bge-large-en')
+
 app = FastAPI()
 
 class EmbedRequest(BaseModel):

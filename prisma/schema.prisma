@@ -22,6 +22,7 @@ model article {
   context   String?
   createdAt DateTime               @default(now()) @db.Timestamp(6)
   embedding Unsupported("vector")?
+  context_tsv Unsupported("tsvector")?
 
   @@index([category], map: "idx_category_article")
   @@index([language], map: "idx_language_article")

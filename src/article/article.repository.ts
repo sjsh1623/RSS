@@ -30,20 +30,21 @@ export class ArticleRepository {
             embedding,
         } = data;
 
-        const embeddingStr = (embedding ?? []).join(',');
+        const embeddingArr = embedding ?? [];
+        const embeddingFormatted = `[${embeddingArr.join(',')}]`;
 
         const inserted = await this.prisma.$queryRawUnsafe<article[]>(`
-                INSERT INTO article (
-                  title, link, "linkHash", "pubDate", source, category,
-                  language, url, context, "createdAt", embedding
-                ) VALUES (
-                  $1, $2, $3, $4, $5, $6,
-                  $7, $8, $9, now(), $10
-                )
-                RETURNING *;
+                    INSERT INTO article (
+                        title, link, "linkHash", "pubDate", source, category,
+                        language, url, context, "createdAt", embedding, "context_tsv"
+                    ) VALUES (
+                                 $1, $2, $3, $4, $5, $6,
+                                 $7, $8, $9, now(), $10::vector, to_tsvector('simple', $1)
+                             )
+                        RETURNING id;
             `,
             title, link, linkHash, pubDate, source, category,
-            language, url, context, embeddingStr ?? null
+            language, url, context, embeddingFormatted
         );
 
         return inserted[0];
