@@ -3,6 +3,7 @@ import { ScheduleModule } from '@nestjs/schedule'; // ✅ 이거 꼭 필요
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { RssModule } from './collector/rss/rss.module';
 import { ArticleModule } from './article/article.module';
+import {UserCategoryPreferenceModule} from "@/user-preference/user-category-preference.module";
 
 @Module({
     imports: [
@@ -10,6 +11,7 @@ import { ArticleModule } from './article/article.module';
         SchedulerModule,
         RssModule,
         ArticleModule,
+        UserCategoryPreferenceModule,
     ],
 })
 export class AppModule {}
