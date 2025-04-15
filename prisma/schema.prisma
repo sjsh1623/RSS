@@ -10,18 +10,19 @@ datasource db {
 }
 
 model article {
-  id        Int                    @id @default(autoincrement())
-  title     String
-  link      String?
-  linkHash  String                 @unique @db.VarChar(64)
-  pubDate   DateTime               @db.Timestamp(6)
-  source    String
-  category  String
-  language  String
-  url       String
-  context   String?
-  createdAt DateTime               @default(now()) @db.Timestamp(6)
-  embedding Unsupported("vector")?
+  id          Int                      @id @default(autoincrement())
+  title       String
+  link        String?
+  linkHash    String                   @unique @db.VarChar(64)
+  pubDate     DateTime                 @db.Timestamp(6)
+  source      String
+  category    String
+  language    String
+  url         String
+  summary     String
+  context     String?
+  createdAt   DateTime                 @default(now()) @db.Timestamp(6)
+  embedding   Unsupported("vector")?
   context_tsv Unsupported("tsvector")?
 
   @@index([category], map: "idx_category_article")
@@ -29,14 +30,14 @@ model article {
 }
 
 model rss {
-  id         Int       @id(map: "rss_source_pkey") @default(autoincrement())
-  url        String    @unique(map: "rss_source_url_key")
-  language   String
-  is_active  Boolean?  @default(true)
-  created_at DateTime? @default(now()) @db.Timestamp(6)
+  id           Int       @id(map: "rss_source_pkey") @default(autoincrement())
+  url          String    @unique(map: "rss_source_url_key")
+  language     String
+  is_active    Boolean?  @default(true)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
   sourceTypeId Int
 
-  sourceType   SourceType @relation(fields: [sourceTypeId], references: [id])
+  sourceType SourceType @relation(fields: [sourceTypeId], references: [id])
 }
 
 model user {
@@ -48,24 +49,24 @@ model user {
 }
 
 model UserCategoryPreference {
-  id           Int        @id @default(autoincrement())
+  id           Int @id @default(autoincrement())
   userId       Int
   categoryId   Int
   sourceTypeId Int
 
-  category     Category   @relation(fields: [categoryId], references: [id])
-  sourceType   SourceType @relation(fields: [sourceTypeId], references: [id])
+  category   Category   @relation(fields: [categoryId], references: [id])
+  sourceType SourceType @relation(fields: [sourceTypeId], references: [id])
 
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, categoryId, sourceTypeId])
 }
 
 model Category {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  code      String  @unique
+  code      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -73,9 +74,9 @@ model Category {
 }
 
 model SourceType {
-  id        Int     @id @default(autoincrement())
-  name      String  // ex: "news", "blog", "instagram", "facebook"
-  code      String  @unique
+  id   Int    @id @default(autoincrement())
+  name String // ex: "news", "blog", "instagram", "facebook"
+  code String @unique
 
   preferences UserCategoryPreference[]
 

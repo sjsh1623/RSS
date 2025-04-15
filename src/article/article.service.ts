@@ -24,16 +24,20 @@ export class ArticleService {
 
         const extraction = await this.extractor.extractArticle(data.link || '');
         const context = extraction?.text || '';
-        //const test = await this.classifierService.classifyAndSummarize(context.slice(0,1000));
-        const embedding = await this.embeddingService.getEmbedding(context);
-        const category = "test";
+        const refinedData = await this.classifierService.classifyAndSummarize(context.slice(0,1000));
+        const summary = refinedData.summary;
+        const imageUrl = refinedData.imgUrl
+        const embedding = await this.embeddingService.getEmbedding(summary);
+        const category = refinedData.category;
 
         await this.repo.save({
             ...data,
             linkHash,
             category,
             embedding,
-            context
+            context,
+            imageUrl,
+            summary
         });
 
         return true;
