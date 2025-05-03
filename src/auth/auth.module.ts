@@ -1,22 +1,21 @@
-// src/auth/auth.module.ts
-import {Module} from '@nestjs/common';
-import {AuthService} from './auth.service';
-import {AuthController} from './auth.controller';
-import {JwtModule} from '@nestjs/jwt';
-import {JwtStrategy} from './jwt/jwt.strategy';
-import {JwtRefreshStrategy} from './jwt/jwt.refresh.strategy';
-import {UserModule} from '@/user/user.module';
-import {ConfigModule} from "@nestjs/config";
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
+
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { AuthRepository } from './auth.repository';
+import { JwtStrategy } from './jwt/jwt.strategy';
+import { JwtRefreshStrategy } from './jwt/jwt.refresh.strategy';
+import { UserModule } from '@/user/user.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(), // ✅ .env 설정 불러오기
-        JwtModule.register({}), // 토큰 서명은 AuthService에서 수행
+        ConfigModule.forRoot(),
+        JwtModule.register({}),
         UserModule,
-        JwtModule.register({}), // configService를 통해 동적 등록 예정
     ],
     controllers: [AuthController],
-    providers: [AuthService, JwtStrategy, JwtRefreshStrategy],
+    providers: [AuthService, AuthRepository, JwtStrategy, JwtRefreshStrategy],
 })
-export class AuthModule {
-}
+export class AuthModule {}

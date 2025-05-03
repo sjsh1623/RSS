@@ -1,54 +1,60 @@
-import { PrismaService } from '@/shared/prisma.service';
-import { Injectable } from '@nestjs/common';
-import { article } from '@prisma/client';
-
-type ArticleInput = Omit<article, 'id' | 'createdAt'> & {
-    embedding?: number[]; // ✅ embedding 필드 추가 (선택적)
-};
+import {PrismaService} from '@/shared/prisma.service';
+import {Injectable} from '@nestjs/common';
+import {article} from '@prisma/client';
+import {CreateArticleDto} from './dto/create-article.dto';
 
 @Injectable()
 export class ArticleRepository {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(private readonly prisma: PrismaService) {
+    }
 
-    async findByHash(linkHash: string): Promise<article | null> {
+    async findByHash(urlHash: string): Promise<article | null> {
         return this.prisma.article.findUnique({
-            where: { linkHash },
+            where: {urlHash},
         });
     }
 
-    async save(data: Omit<ArticleInput, 'id' | 'createdAt'>): Promise<article> {
+    async save(dto: CreateArticleDto): Promise<article> {
         const {
             title,
-            link,
-            linkHash,
+            url,
+            urlHash,
+            pubDate,
+            source,
+            category,
+            language,
+            context,
+            embedding,
+            imageUrl,
+            shortSummary,
+            longSummary,
+        } = dto;
+
+        const formattedEmbedding = `[${(embedding ?? []).join(',')}]`;
+
+        const result = await this.prisma.$queryRawUnsafe<article[]>(
+            `
+                INSERT INTO article (title, urlHash, pubDate, source, category,
+                                     language, url, context, createdAt, embedding,
+                                     "context_tsv", imageUrl, shortSummary, longSummary)
+                VALUES ($1, $2, $3, $4, $5,
+                        $6, $7, $8, now(), $9::vector,
+                        to_tsvector('simple', $1), $10, $11, $12) RETURNING *;
+            `,
+            title,
+            urlHash,
             pubDate,
             source,
             category,
             language,
             url,
             context,
-            embedding,
+            formattedEmbedding,
             imageUrl,
-            summary
-        } = data;
-
-        const embeddingArr = embedding ?? [];
-        const embeddingFormatted = `[${embeddingArr.join(',')}]`;
-
-        const inserted = await this.prisma.$queryRawUnsafe<article[]>(`
-                    INSERT INTO article (
-                        title, link, "linkHash", "pubDate", source, category,
-                        language, url, context, "createdAt", embedding, "context_tsv", "image_url", summary
-                    ) VALUES (
-                                 $1, $2, $3, $4, $5, $6,
-                                 $7, $8, $9, now(), $10::vector, to_tsvector('simple', $1), $11, $12
-                             )
-                        RETURNING id;
-            `,
-            title, link, linkHash, pubDate, source, category,
-            language, url, context, embeddingFormatted, imageUrl, summary
+            shortSummary,
+            longSummary
         );
 
-        return inserted[0];
+        return result[0];
     }
 }

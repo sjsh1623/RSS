@@ -32,7 +32,7 @@ export class RssJobService implements OnModuleInit {
         this.logger.log(`📥 RSS Source ${this.feedEntries.length}개 캐시 로드 완료`);
     }
 
-    @Cron('*/30 * * * * *') // 10초마다 실행
+    @Cron('*/3 * * * *') // 매 3분마다 실행
     async handleScheduledRss(): Promise<void> {
         if (this.feedEntries.length === 0) {
             this.logger.warn('⚠️ RSS 소스가 없습니다. 캐시를 확인해주세요.');
@@ -46,13 +46,13 @@ export class RssJobService implements OnModuleInit {
 
         let newCount = 0;
         for (const article of articles) {
-            const saved = await this.articleService.saveIfNotExists({
+            const saved = await this.articleService.saveArticleWithLLMProcessing({
                 title: article.title,
-                link: article.link,
+                url: article.url,
                 pubDate: article.pubDate ? new Date(article.pubDate) : new Date(),
                 source: article.source,
                 language: article.language,
-                url,
+                imageUrl,
                 context: null,
             });
 

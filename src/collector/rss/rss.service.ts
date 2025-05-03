@@ -22,7 +22,7 @@ export class RssService {
             const feed = await this.parser.parseURL(feedUrl);
             return feed.items.map(item => ({
                 title: item.title ?? '',
-                link: item.link ?? '',
+                url: item.link ?? '',
                 pubDate: item.pubDate,
                 source: meta.source,
                 language: meta.language,

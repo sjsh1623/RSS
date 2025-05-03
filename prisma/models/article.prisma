@@ -1,0 +1,20 @@
+model article {
+  id           Int                      @id @default(autoincrement())
+  url          String
+  urlHash      String                   @unique @db.VarChar(64)
+  title        String
+  pubDate      DateTime                 @db.Timestamp(6)
+  source       String
+  category     String
+  language     String
+  shortSummary String
+  longSummary  String
+  imageUrl     String
+  context      String?
+  createdAt    DateTime                 @default(now()) @db.Timestamp(6)
+  embedding    Unsupported("vector")?
+  context_tsv  Unsupported("tsvector")?
+
+  @@index([category], map: "idx_category_article")
+  @@index([language], map: "idx_language_article")
+}

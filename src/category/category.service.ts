@@ -1,25 +1,18 @@
-// src/category/category.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/shared/prisma.service';
-import { RedisService } from '@/shared/redis.service';
+import { CategoryRepository } from './category.repository';
+import { CategoryResponseDto } from './dto/category-response.dto';
 
 @Injectable()
 export class CategoryService {
-    constructor(
-        private readonly prisma: PrismaService,
-        private readonly redisService: RedisService,
-    ) {}
+    constructor(private readonly categoryRepository: CategoryRepository) {}
 
-    async updateCategoryCache() {
-        const categories = await this.prisma.category.findMany({
-            where: { is_active: true },
-            include: { subcategory: { where: { is_active: true } } },
-        });
+    async findActiveCategories(): Promise<CategoryResponseDto[]> {
+        const categories = await this.categoryRepository.findAllActiveCategoriesWithSubcategories();
 
-        await this.redisService.set('category:all', categories);
-    }
-
-    async getCategoriesFromCache() {
-        return await this.redisService.get('category:all');
+        return categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            code: category.code,
+        }));
     }
 }

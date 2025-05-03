@@ -1,9 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {JwtService} from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '@/user/user.service';
-import { RedisService } from '@/shared/redis.service';
-import { MailService } from '@/shared/mail.service';
+
+import {UserService} from '@/user/user.service';
+import {RedisService} from '@/shared/redis.service';
+import {MailService} from '@/shared/mail.service';
+import {AuthRepository} from './auth.repository';
 
 @Injectable()
 export class AuthService {
@@ -12,71 +14,55 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly redisService: RedisService,
         private readonly mailService: MailService,
-    ) {}
+        private readonly authRepository: AuthRepository,
+    ) {
+    }
 
     async validateUser(email: string, password: string) {
         const user = await this.userService.findByEmail(email);
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        const isPasswordValid = user && await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
             throw new UnauthorizedException('이메일 또는 비밀번호가 올바르지 않습니다.');
         }
+
         return user;
     }
 
     async login(user: any) {
-        const payload = { sub: user.id, email: user.email };
+        const payload = {sub: user.id, email: user.email};
+        const accessToken = this.jwtService.sign(payload, {expiresIn: '1h'});
+        const refreshToken = this.jwtService.sign(payload, {expiresIn: '7d'});
 
-        const accessToken = this.jwtService.sign(payload);
+        await this.redisService.set(`refresh:${user.id}`, refreshToken, 604800); // 7일
 
-        const refreshToken = this.jwtService.sign(payload, {
-            secret: process.env.JWT_REFRESH_SECRET,
-            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-        });
+        return {accessToken, refreshToken};
+    }
 
-        const ttl = parseInt(process.env.JWT_REFRESH_TTL || '1296000', 10); // 기본값: 15일
-        await this.redisService.set(`refresh:${user.id}`, refreshToken, ttl);
+    async refreshAccessToken(user: { id: number; email: string; refreshToken: string }) {
+        const savedToken = await this.redisService.get(`refresh:${user.id}`);
+        if (savedToken !== user.refreshToken) {
+            throw new UnauthorizedException('리프레시 토큰이 유효하지 않습니다.');
+        }
 
-        return { accessToken, refreshToken };
+        const newAccessToken = this.jwtService.sign(
+            {sub: user.id, email: user.email},
+            {expiresIn: '1h'},
+        );
+
+        return {accessToken: newAccessToken};
     }
 
     async sendEmailVerification(email: string) {
-        const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6자리
-        await this.redisService.set(`verify:${email}`, code, 180); // 3분
-        await this.mailService.sendEmailVerification(email, code);
+        const verificationCode = this.authRepository.generateVerificationCode();
+        await this.redisService.set(`verify:${email}`, verificationCode, 300); // 5분
+        //await this.mailService.sendCode(email, verificationCode);
     }
 
     async verifyEmailCode(email: string, code: string) {
-        const stored = await this.redisService.get(`verify:${email}`);
-        if (!stored || stored !== code) {
-            throw new UnauthorizedException('인증 코드가 올바르지 않거나 만료되었습니다.');
-        }
-
-        await this.redisService.delete(`verify:${email}`); // 인증 후 삭제
-    }
-
-    async refreshToken(refreshToken: string) {
-        try {
-            const payload = this.jwtService.verify(refreshToken, {
-                secret: process.env.JWT_REFRESH_SECRET,
-            });
-
-            const stored = await this.redisService.get(`refresh:${payload.sub}`);
-            if (!stored || stored !== refreshToken) {
-                throw new UnauthorizedException('Refresh token is invalid or expired.');
-            }
-
-            const newPayload = { sub: payload.sub, email: payload.email };
-            const accessToken = this.jwtService.sign(newPayload);
-            const newRefreshToken = this.jwtService.sign(newPayload, {
-                secret: process.env.JWT_REFRESH_SECRET,
-                expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-            });
-
-            const ttl = parseInt(process.env.JWT_REFRESH_TTL || '1296000', 10);
-            await this.redisService.set(`refresh:${payload.sub}`, newRefreshToken, ttl);
-
-            return { accessToken, refreshToken: newRefreshToken };
-        } catch (e) {
-            throw new UnauthorizedException('Invalid refresh token');
+        const savedCode = await this.redisService.get(`verify:${email}`);
+        if (savedCode !== code) {
+            throw new UnauthorizedException('인증 코드가 일치하지 않습니다.');
         }
     }
 }

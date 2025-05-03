@@ -1,13 +1,18 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 async function main() {
     // source types
     await prisma.sourceType.createMany({
         data: [
-            { name: '뉴스', code: 'news' },
-            { name: '블로그', code: 'blog' },
+            {id: 1, name: '연합뉴스', type: 'news'},
+            {id: 2, name: 'SBS', type: 'news'},
+            {id: 3, name: '매일경제', type: 'news'},
+            {id: 4, name: 'JTBC', type: 'blog'},
+            {id: 5, name: '동아일보', type: 'blog'},
+            {id: 6, name: '블로그', type: 'blog'},
         ],
         skipDuplicates: true,
     });
@@ -15,9 +20,9 @@ async function main() {
     // categories
     await prisma.category.createMany({
         data: [
-            { name: 'IT/기술', code: 'tech' },
-            { name: '경제', code: 'economy' },
-            { name: '정치', code: 'politics' },
+            {name: 'IT/기술', code: 'tech'},
+            {name: '경제', code: 'economy'},
+            {name: '정치', code: 'politics'},
         ],
         skipDuplicates: true,
     });
@@ -31,7 +36,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:58.984Z"),
-                source: "연합뉴스"
+                sourceTypeId: 1
             },
             {
                 id: 2,
@@ -39,7 +44,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:58.997Z"),
-                source: "SBS"
+                sourceTypeId: 2
             },
             {
                 id: 3,
@@ -47,7 +52,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:59.005Z"),
-                source: "매일경제"
+                sourceTypeId: 3
             },
             {
                 id: 4,
@@ -55,7 +60,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:59.014Z"),
-                source: "매일경제"
+                sourceTypeId: 3
             },
             {
                 id: 5,
@@ -63,7 +68,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:59.022Z"),
-                source: "JTBC"
+                sourceTypeId: 4
             },
             {
                 id: 6,
@@ -71,7 +76,7 @@ async function main() {
                 language: "korean",
                 is_active: true,
                 created_at: new Date("2025-04-08T13:45:59.030Z"),
-                source: "동아일보"
+                sourceTypeId: 5
             }
         ],
         skipDuplicates: true,

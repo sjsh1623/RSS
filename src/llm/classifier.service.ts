@@ -1,18 +1,20 @@
 import {Injectable} from '@nestjs/common';
-import {GroqClient} from "@/llm/groq.client";
 import {CategoryService} from "@/category/category.service";
+import {CohereClient} from "@/llm/cohere.client";
 
 @Injectable()
 export class ClassifierService {
     constructor(
-        private readonly groq: GroqClient,
+        private readonly cohere: CohereClient,
         private readonly categoryService: CategoryService
     ) {}
 
-    async classifyAndSummarize(content: string): Promise<{
+    async classifyAndSummarizeLLM(content: string): Promise<{
         category: string;
         imgUrl: string;
         summary: string;
+        shortSummary: string;
+        longSummary: string;
     }> {
         const categories = await this.categoryService.getCategoriesFromCache();
         const prompt = `
@@ -21,14 +23,16 @@ export class ClassifierService {
         사용 가능한 category 목록: ${JSON.stringify(categories)}
         결과는 아래 형식으로 출력해줘:
         {
+          "title": 시선을 끌수 있는 제목
           "category": "위 카테고리 목록중 하나",
-          "summary": "요약 3줄 (한글)",
+          "longSummary": "한 문단 (한글)",
+          "shortSummary": "짧은 요약 3줄 (한글)",
           "imgUrl" : "이미지 URL"
         }
 
         본문: ${content}`;
 
-        const raw = await this.groq.ask(prompt);
+        const raw = await this.cohere.ask(prompt);
 
         try {
             return JSON.parse(raw);

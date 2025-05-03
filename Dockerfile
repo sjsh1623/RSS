@@ -8,6 +8,7 @@ RUN npm install
 RUN apt-get update && apt-get install -y netcat-openbsd
 
 COPY . .
+COPY prisma/schema.prisma prisma/schema.prisma
 
 RUN npx prisma generate
 RUN npm run build

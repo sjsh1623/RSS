@@ -1,13 +1,13 @@
-// src/category/category.controller.ts
 import { Controller, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
+import { CategoryResponseDto } from './dto/category-response.dto';
 
-@Controller('category')
+@Controller('categories')
 export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
     @Get()
-    async getAllCategories() {
-        return await this.categoryService.getCategoriesFromCache();
+    async getActiveCategories(): Promise<CategoryResponseDto[]> {
+        return this.categoryService.findActiveCategories();
     }
 }
