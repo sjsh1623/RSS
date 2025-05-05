@@ -1,30 +1,38 @@
-import {Injectable} from '@nestjs/common';
-import {createClient} from 'redis';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { createClient, RedisClientType } from 'redis';
 
 @Injectable()
-export class RedisService {
-    private client = createClient({url: process.env.REDIS_URL_RSS});
+export class RedisService implements OnModuleInit, OnModuleDestroy {
+    private client: RedisClientType;
 
     async onModuleInit() {
+        this.client = createClient({url: process.env.REDIS_URL_RSS});
+        this.client.on('error', (err) => console.error('Redis Client Error', err));
         await this.client.connect();
     }
 
-    async set(key: string, value: any, ttlInSec?: number): Promise<void> {
-        if (ttlInSec) {
-            await this.client.set(key, JSON.stringify(value), {
-                EX: ttlInSec,
+    async onModuleDestroy() {
+        await this.client.quit();
+    }
+
+    /** 문자열 값 반환 (없으면 null) */
+    async get(key: string): Promise<string | null> {
+        return this.client.get(key);
+    }
+
+    /** TTL(초) 옵션이 있을 경우 만료시간 설정 */
+    async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
+        if (ttlSeconds && ttlSeconds > 0) {
+            await this.client.set(key, value, {
+                EX: ttlSeconds,
             });
         } else {
-            await this.client.set(key, JSON.stringify(value));
+            await this.client.set(key, value);
         }
     }
 
-    async get(key: string) {
-        const data = await this.client.get(key);
-        return data ? JSON.parse(data) : null;
-    }
-
-    async delete(key: string): Promise<void> {
-        await this.client.del(key); // ✅ 여기!
+    /** 키 삭제 */
+    async del(key: string): Promise<void> {
+        await this.client.del(key);
     }
 }

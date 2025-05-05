@@ -1,0 +1,17 @@
+model AuthCode {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([email], name: "idx_authcode_email")
+}
+
+model Token {
+  id           Int      @id @default(autoincrement())
+  email        String
+  accessToken  String
+  refreshToken String   @unique
+  createdAt    DateTime @default(now())
+}
