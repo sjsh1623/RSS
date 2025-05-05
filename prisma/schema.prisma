@@ -1,0 +1,105 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../node_modules/.prisma/client"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+
+model article {
+  id           Int                      @id @default(autoincrement())
+  url          String
+  urlHash      String                   @unique @db.VarChar(64)
+  title        String
+  pubDate      DateTime                 @db.Timestamp(6)
+  source       String
+  category     String
+  language     String
+  shortSummary String
+  longSummary  String
+  imageUrl     String
+  context      String?
+  createdAt    DateTime                 @default(now()) @db.Timestamp(6)
+  embedding    Unsupported("vector")?
+  context_tsv  Unsupported("tsvector")?
+
+  @@index([category], map: "idx_category_article")
+  @@index([language], map: "idx_language_article")
+}
+
+
+model AuthCode {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([email], name: "idx_authcode_email")
+}
+
+model Token {
+  id           Int      @id @default(autoincrement())
+  email        String
+  accessToken  String
+  refreshToken String   @unique
+  createdAt    DateTime @default(now())
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  preferences UserCategoryPreference[]
+}
+
+model SourceType {
+  id   Int    @id @default(autoincrement())
+  name String
+  type String
+
+  preferences UserCategoryPreference[]
+  rss         rss[]
+}
+
+model UserCategoryPreference {
+  id           Int @id @default(autoincrement())
+  userId       Int
+  categoryId   Int
+  sourceTypeId Int
+
+  category   Category   @relation(fields: [categoryId], references: [id])
+  sourceType SourceType @relation(fields: [sourceTypeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, categoryId, sourceTypeId])
+}
+
+model rss {
+  id           Int       @id(map: "rss_source_pkey") @default(autoincrement())
+  url          String    @unique(map: "rss_source_url_key")
+  language     String
+  is_active    Boolean?  @default(true)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  sourceTypeId Int
+
+  sourceType SourceType @relation(fields: [sourceTypeId], references: [id])
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?  @db.VarChar(100)
+  createdAt DateTime @default(now())
+}
