@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ITokenRepository } from '../../domain/auth/repositories/token.repository.interface';
-import { TokenPair } from '../../domain/auth/entities/token.entity';
+import { ITokenRepository } from '@/domain/auth/repositories/token.repository.interface';
+import { TokenPair } from '@/domain/auth/entities/token.entity';
+import {TOKEN_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
 
 @Injectable()
 export class IssueTokensUseCase {
     constructor(
-        private readonly jwtService: JwtService,
+        @Inject(TOKEN_REPOSITORY)
         private readonly tokenRepo: ITokenRepository,
+        private readonly jwtService: JwtService,
     ) {}
 
     async execute(email: string): Promise<TokenPair> {

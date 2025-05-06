@@ -5,6 +5,7 @@ import {ILlmService} from "@/domain/llm/services/llm-service.interface";
 import {hashUrl} from "@/shared/utils/hash.util";
 import {EmbeddingService} from "@/infrastructure/external/embedding/embedding.service";
 import {ARTICLE_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
+import {LLM_SERVICE} from "@/infrastructure/external/llm/llm-service.token";
 
 
 @Injectable()
@@ -12,6 +13,7 @@ export class SaveArticleUseCase {
     constructor(
         @Inject(ARTICLE_REPOSITORY)
         private readonly repo: IArticleRepository,
+        @Inject(LLM_SERVICE)
         private readonly llmService: ILlmService,
         private readonly embeddingService: EmbeddingService,
     ) {

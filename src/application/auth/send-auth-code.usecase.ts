@@ -20,7 +20,7 @@ export class SendAuthCodeUseCase {
         await this.mailService.sendMail({
             to: email,
             subject: '[Planiary] 인증 코드 안내',
-            text: `인증 코드: ${code} (5분간 유효)`,
+            content: `인증 코드: ${code} (5분간 유효)`,
         });
     }
 }

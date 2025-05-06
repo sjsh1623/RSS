@@ -11,10 +11,11 @@ import {IssueTokensUseCase} from "@/application/auth/issue-tokens.usecase";
 import {RevokeTokensUseCase} from "@/application/auth/revoke-tokens.usecase";
 import {AuthCodeRepositoryImpl} from "@/infrastructure/persistence/prisma/auth-code.repository.impl";
 import {JwtStrategy} from "@/shared/strategies/jwt.strategy";
+import {MailModule} from "@/shared/utils/mail.module";
 import {
     AUTH_CODE_REPOSITORY,
-    PersistenceModule,
-    TOKEN_REPOSITORY
+    TOKEN_REPOSITORY,
+    PersistenceModule
 } from "@/infrastructure/persistence/persistence.module";
 
 @Module({
@@ -26,6 +27,7 @@ import {
         }),
         PrismaModule,
         RedisModule,
+        MailModule,
         PersistenceModule
     ],
     controllers: [AuthController],

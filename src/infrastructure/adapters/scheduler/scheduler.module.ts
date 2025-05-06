@@ -12,6 +12,8 @@ import {BlogFeedProvider} from '../../external/blog/blog-feed.provider';
 import {RedisModule} from '@/shared/redis.module';
 import {LlmModule} from "../../external/llm/llm.module";
 import {PersistenceModule} from "@/infrastructure/persistence/persistence.module";
+import { ArticleModule } from '@/application/article/article.module';
+import {CategoryModule} from "@/application/category/category.module";
 
 
 @Module({
@@ -20,6 +22,8 @@ import {PersistenceModule} from "@/infrastructure/persistence/persistence.module
         PersistenceModule,
         RedisModule,
         LlmModule,
+        ArticleModule,
+        CategoryModule
     ],
     providers: [
         // ① UseCase & Adapter

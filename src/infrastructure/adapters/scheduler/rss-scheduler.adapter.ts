@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { ProcessRssUseCase } from '../../../application/scheduler/process-rss.usecase';
+import { ProcessRssUseCase } from '@/application/scheduler/process-rss.usecase';
 
 @Injectable()
 export class RssSchedulerAdapter {

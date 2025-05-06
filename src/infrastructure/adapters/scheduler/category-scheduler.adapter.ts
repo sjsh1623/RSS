@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { UpdateCategoriesUseCase } from '../../../application/scheduler/update-categories.usecase';
+import { UpdateCategoriesUseCase } from '@/application/scheduler/update-categories.usecase';
 
 @Injectable()
 export class CategorySchedulerAdapter {

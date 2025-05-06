@@ -1,9 +1,13 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { IAuthCodeRepository } from '../../domain/auth/repositories/auth-code.repository.interface';
+import {Injectable, BadRequestException, Inject} from '@nestjs/common';
+import {IAuthCodeRepository} from '@/domain/auth/repositories/auth-code.repository.interface';
+import {AUTH_CODE_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
 
 @Injectable()
 export class VerifyAuthCodeUseCase {
-    constructor(private readonly repo: IAuthCodeRepository) {}
+    constructor(
+        @Inject(AUTH_CODE_REPOSITORY)
+        private readonly repo: IAuthCodeRepository) {
+    }
 
     async execute(email: string, code: string): Promise<void> {
         const record = await this.repo.find(email);

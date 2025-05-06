@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ListCategoriesUseCase } from '../../application/category/list-categories.usecase';
-import { RedisService } from '../../shared/redis.service';
+import { ListCategoriesUseCase } from '@/application/category/list-categories.usecase';
+import { RedisService } from '@/shared/redis.service';
 
 @Injectable()
 export class UpdateCategoriesUseCase {
