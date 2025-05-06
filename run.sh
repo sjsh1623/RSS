@@ -13,4 +13,6 @@ if [ ! -f prisma/schema.prisma ]; then
 fi
 
 echo "✅ 병합 완료, Docker Compose 시작"
-docker compose up --build
+docker-compose down -v
+docker-compose build --no-cache
+docker-compose up -d
