@@ -1,11 +1,14 @@
 import {Controller, Get, Param, Query, Post, Body} from '@nestjs/common';
-import {GetArticleUseCase} from '../../application/article/get-article.usecase';
-import {ListArticlesUseCase} from '../../application/article/list-articles.usecase';
-import {SaveArticleUseCase} from '../../application/article/save-article.usecase';
+import {GetArticleUseCase} from '@/application/article/get-article.usecase';
+import {ListArticlesUseCase} from '@/application/article/list-articles.usecase';
+import {SaveArticleUseCase} from '@/application/article/save-article.usecase';
 import {ArticleDto} from '../dto/article.dto';
 import {CreateArticleDto} from '../dto/create-article.dto';
-import {SearchArticlesUseCase} from "../../application/article/search-articles.usecase";
+import {SearchArticlesUseCase} from "@/application/article/search-articles.usecase";
+import {ApiTags} from "@nestjs/swagger";
 
+
+@ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
     constructor(

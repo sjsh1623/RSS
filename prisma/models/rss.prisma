@@ -4,7 +4,7 @@ model rss {
   language     String
   isActive    Boolean?  @default(true)
   createdAt   DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime? @default(now()) @db.Timestamp(6)
   sourceTypeId Int
-
-  sourceType SourceType @relation(fields: [sourceTypeId], references: [id])
+  sourceType sourceType @relation(fields: [sourceTypeId], references: [id])
 }

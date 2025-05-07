@@ -16,6 +16,8 @@ RUN npm ci
 
 # 3) Prisma 스키마 포함 및 Client 생성
 COPY prisma ./prisma
+COPY .env ./.env
+COPY tsconfig*.json ./
 RUN npx prisma generate
 
 # 4) 애플리케이션 소스 복사 및 빌드

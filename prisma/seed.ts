@@ -35,6 +35,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:58.984Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 1,
             },
             {
@@ -43,6 +44,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:58.997Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 2,
             },
             {
@@ -51,6 +53,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.005Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 3,
             },
             {
@@ -59,6 +62,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.014Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 3,
             },
             {
@@ -67,6 +71,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.022Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 4,
             },
             {
@@ -75,6 +80,7 @@ async function main() {
                 language: 'korean',
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.030Z'),
+                updatedAt: new Date('2025-04-08T13:45:58.984Z'),
                 sourceTypeId: 5,
             },
             // …and so on for items 3–6…

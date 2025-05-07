@@ -10,7 +10,13 @@ export class RssSourceRepositoryImpl implements IReadRssSourceRepository {
     }
 
     async findAllActive(): Promise<RssSource[]> {
-        const records = await this.prisma.rss.findMany();
-        return records.map(r => new RssSource(r.id, r.url, r.type, r.source, r.language));
+        const records = await this.prisma.rss.findMany({
+            include: {
+                sourceType: {
+                    select: {name: true}
+                }
+            }
+        });
+        return records.map(r => new RssSource(r.id, r.url, r.sourceType.name, r.language));
     }
 }

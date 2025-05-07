@@ -14,5 +14,4 @@ fi
 
 echo "✅ 병합 완료, Docker Compose 시작"
 docker-compose down -v
-docker-compose build --no-cache
-docker-compose up -d
+docker compose up --build

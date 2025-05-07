@@ -1,4 +1,4 @@
-import { Article } from '../../domain/article/entities/article.entity';
+import { Article } from '@/domain/article/entities/article.entity';
 import { ArticleDto } from '../dto/article.dto';
 
 export class ArticleMapper {

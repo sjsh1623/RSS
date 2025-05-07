@@ -5,6 +5,7 @@ import {IssueTokensUseCase} from '@/application/auth/issue-tokens.usecase';
 import {RevokeTokensUseCase} from '@/application/auth/revoke-tokens.usecase';
 import {JwtAuthGuard} from '@/shared/guards/jwt-auth.guard';
 import {Request} from 'express';
+import {ApiTags} from "@nestjs/swagger";
 
 export interface RequestWithUser extends Request {
     user: {
@@ -24,6 +25,8 @@ class CodeDto {
     code!: string;
 }
 
+
+@ApiTags('authentications')
 @Controller('auth')
 export class AuthController {
     constructor(

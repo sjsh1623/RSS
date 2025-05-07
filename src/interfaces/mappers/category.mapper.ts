@@ -1,4 +1,4 @@
-import { Category, Subcategory } from '../../domain/category/entities/category.entity';
+import { Category, Subcategory } from '@/domain/category/entities/category.entity';
 import { CategoryDto, SubcategoryDto } from '../dto/category.dto';
 
 export class CategoryMapper {

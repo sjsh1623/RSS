@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { ListCategoriesUseCase } from '../../application/category/list-categories.usecase';
-import { GetCategoryUseCase } from '../../application/category/get-category.usecase';
-import { CreateCategoryUseCase } from '../../application/category/create-category.usecase';
-import { UpdateCategoryUseCase } from '../../application/category/update-category.usecase';
-import { DeleteCategoryUseCase } from '../../application/category/delete-category.usecase';
+import { ListCategoriesUseCase } from '@/application/category/list-categories.usecase';
+import { GetCategoryUseCase } from '@/application/category/get-category.usecase';
+import { CreateCategoryUseCase } from '@/application/category/create-category.usecase';
+import { UpdateCategoryUseCase } from '@/application/category/update-category.usecase';
+import { DeleteCategoryUseCase } from '@/application/category/delete-category.usecase';
 import { CategoryDto } from '../dto/category.dto';
+import {ApiTags} from "@nestjs/swagger";
 
 class CreateCategoryRequest {
   name!: string;
@@ -16,6 +17,8 @@ class UpdateCategoryRequest {
   code!: string;
 }
 
+
+@ApiTags('categories')
 @Controller('categories')
 export class CategoryController {
   constructor(

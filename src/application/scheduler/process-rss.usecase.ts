@@ -26,6 +26,7 @@ export class ProcessRssUseCase {
         this.logger.debug('Starting RSS processing');
 
         const configs = await this.rssRepo.findAllActive();
+        console.log(configs);
         if (configs.length === 0) {
             this.logger.warn('No active RSS configurations found');
             return;
@@ -64,9 +65,9 @@ export class ProcessRssUseCase {
 
     /** 개별 피드 설정 처리 */
     private async handleConfig(config: FeedConfig): Promise<void> {
-        const provider = this.feedProviders.find(p => p.supports(config.type));
+        const provider = this.feedProviders.find(p => p.supports(config.source));
         if (!provider) {
-            this.logger.warn(`No provider for feed type: ${config.type}`);
+            this.logger.warn(`No provider for feed type: ${config.source}`);
             return;
         }
 

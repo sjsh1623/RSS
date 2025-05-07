@@ -6,7 +6,7 @@ import { ProcessRssUseCase } from '@/application/scheduler/process-rss.usecase';
 export class RssSchedulerAdapter {
   constructor(private readonly processRssUseCase: ProcessRssUseCase) {}
 
-  @Cron('*/3 * * * *')
+  @Cron('*/10 * * * * *')
   async handleCron() {
     await this.processRssUseCase.execute();
   }
