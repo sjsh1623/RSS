@@ -19,6 +19,7 @@ COPY prisma ./prisma
 COPY .env ./.env
 COPY tsconfig*.json ./
 RUN npx prisma generate
+COPY prisma ./prisma
 
 # 4) 애플리케이션 소스 복사 및 빌드
 COPY . .
