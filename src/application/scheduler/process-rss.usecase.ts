@@ -63,11 +63,11 @@ export class ProcessRssUseCase {
         }
     }
 
-    /** 개별 피드 설정 처리 */
+
     private async handleConfig(config: FeedConfig): Promise<void> {
-        const provider = this.feedProviders.find(p => p.supports(config.source));
+        const provider = this.feedProviders.find(p => p.supports(config.sourceTypeName));
         if (!provider) {
-            this.logger.warn(`No provider for feed type: ${config.source}`);
+            this.logger.warn(`No provider for feed type: ${config.sourceTypeName}`);
             return;
         }
 
@@ -90,7 +90,7 @@ export class ProcessRssUseCase {
                     url: item.url,
                     title: item.title,
                     pubDate: new Date(item.pubDate),
-                    source: item.source,
+                    sourceTypeId : item.sourceTypeId,
                     content: item.content,
                     imageUrl: item.imageUrl,
                     language: item.language,

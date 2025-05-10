@@ -23,7 +23,7 @@ export class SaveArticleUseCase {
         url: string;
         title: string;
         pubDate: Date;
-        source: string;
+        sourceTypeId: number;
         content: string;
         imageUrl: string;
         language: string;
@@ -41,7 +41,7 @@ export class SaveArticleUseCase {
             urlHash,
             raw.title,
             raw.pubDate,
-            raw.source,
+            raw.sourceTypeId,
             category,
             raw.language,
             shortSummary,

@@ -18,7 +18,7 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             article.urlHash,
             article.title,
             article.pubDate,
-            article.source,
+            article.sourceTypeId,
             article.category,
             article.language,
             article.shortSummary,

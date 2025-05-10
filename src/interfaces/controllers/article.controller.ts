@@ -3,7 +3,6 @@ import {GetArticleUseCase} from '@/application/article/get-article.usecase';
 import {ListArticlesUseCase} from '@/application/article/list-articles.usecase';
 import {SaveArticleUseCase} from '@/application/article/save-article.usecase';
 import {ArticleDto} from '../dto/article.dto';
-import {CreateArticleDto} from '../dto/create-article.dto';
 import {SearchArticlesUseCase} from "@/application/article/search-articles.usecase";
 import {ApiTags} from "@nestjs/swagger";
 
@@ -14,7 +13,6 @@ export class ArticleController {
     constructor(
         private readonly getArticle: GetArticleUseCase,
         private readonly listArticles: ListArticlesUseCase,
-        private readonly saveArticle: SaveArticleUseCase,
         private readonly searchArticles: SearchArticlesUseCase,
     ) {
     }
@@ -33,10 +31,5 @@ export class ArticleController {
     search(@Query('q') q: string, @Query('limit') limit?: string): Promise<ArticleDto[]> {
         const l = limit ? parseInt(limit, 10) : undefined;
         return this.searchArticles.execute(q, l);
-    }
-
-    @Post()
-    save(@Body() dto: CreateArticleDto): Promise<ArticleDto> {
-        return this.saveArticle.execute(dto);
     }
 }

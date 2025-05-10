@@ -17,6 +17,12 @@ export class RssSourceRepositoryImpl implements IReadRssSourceRepository {
                 }
             }
         });
-        return records.map(r => new RssSource(r.id, r.url, r.sourceType.name, r.language));
+        return records.map(r => ({
+            id: r.id,
+            url: r.url,
+            sourceTypeId : r.sourceTypeId,
+            sourceTypeName: r.sourceType.name,
+            language: r.language,
+        }))
     }
 }
