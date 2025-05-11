@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 async function main() {
     // 1) Source types
-    await prisma.sourceType.createMany({
+    await prisma.provider.createMany({
         data: [
             {id: 1, name: '연합뉴스', type: 'news'},
             {id: 2, name: 'SBS', type: 'news'},
@@ -36,7 +36,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:58.984Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 1,
+                providerId: 1,
             },
             {
                 id: 2,
@@ -45,7 +45,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:58.997Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 2,
+                providerId: 2,
             },
             {
                 id: 3,
@@ -54,7 +54,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.005Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 3,
+                providerId: 3,
             },
             {
                 id: 4,
@@ -63,7 +63,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.014Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 3,
+                providerId: 3,
             },
             {
                 id: 5,
@@ -72,7 +72,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.022Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 4,
+                providerId: 4,
             },
             {
                 id: 6,
@@ -81,7 +81,7 @@ async function main() {
                 isActive: true,
                 createdAt: new Date('2025-04-08T13:45:59.030Z'),
                 updatedAt: new Date('2025-04-08T13:45:58.984Z'),
-                sourceTypeId: 5,
+                providerId: 5,
             },
             // …and so on for items 3–6…
         ],

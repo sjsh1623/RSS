@@ -13,11 +13,11 @@ export class ArticleDto {
   @ApiProperty({ description: '발행 일시', example: '2025-05-06T12:00:00.000Z' })
   pubDate!: Date;
 
-  @ApiProperty({ description: '기사 제공 출처 이름', example: '연합뉴스' })
-  sourceTypeId!: number;
+  @ApiProperty({ description: '기사 제공 출처 아이디', example: '연합뉴스' })
+  providerId!: number;
 
   @ApiProperty({ description: '기사 제공 출처 아이디', example: '연합뉴스' })
-  sourceTypeName!: string;
+  typeName!: string;
 
   @ApiProperty({ description: '분류된 카테고리', example: 'tech' })
   category!: string;

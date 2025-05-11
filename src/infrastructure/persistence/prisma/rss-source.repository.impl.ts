@@ -1,28 +1,34 @@
-import {Injectable} from '@nestjs/common';
-import {IReadRssSourceRepository} from '@/domain/rss/repositories/rss-source.repository.interface';
-import {RssSource} from '@/domain/rss/entities/rss-source.entity';
-import {PrismaService} from "@/infrastructure/persistence/prisma/prisma.service";
-
+import { Injectable } from '@nestjs/common';
+import { IReadRssSourceRepository } from '@/domain/rss/repositories/rss-source.repository.interface';
+import { RssSource } from '@/domain/rss/entities/rss-source.entity';
+import { PrismaService } from '@/infrastructure/persistence/prisma/prisma.service';
 
 @Injectable()
 export class RssSourceRepositoryImpl implements IReadRssSourceRepository {
-    constructor(private readonly prisma: PrismaService) {
-    }
+    constructor(private readonly prisma: PrismaService) {}
 
     async findAllActive(): Promise<RssSource[]> {
-        const records = await this.prisma.rss.findMany({
+        const rows = await this.prisma.rss.findMany({
             include: {
-                sourceType: {
-                    select: {name: true}
-                }
-            }
+                provider: {
+                    select: {
+                        id: true,
+                        name: true,
+                        type: true,
+                    },
+                },
+            },
         });
-        return records.map(r => ({
-            id: r.id,
-            url: r.url,
-            sourceTypeId : r.sourceTypeId,
-            sourceTypeName: r.sourceType.name,
-            language: r.language,
-        }))
+
+        return rows.map(r => new RssSource({
+            id:           r.id,
+            url:          r.url,
+            language:     r.language,
+            providerId:   r.providerId,
+            providerName: r.provider.name,
+            providerType: r.provider.type,
+            createdAt:    r.createdAt!,    // ← now provided
+            updatedAt:    r.updatedAt!,    // ← now provided
+        }));
     }
 }

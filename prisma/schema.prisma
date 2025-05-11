@@ -63,7 +63,7 @@ model category {
   preferences userCategoryPreference[]
 }
 
-model sourceType {
+model provider {
   id   Int    @id @default(autoincrement())
   name String
   type String
@@ -75,15 +75,15 @@ model userCategoryPreference {
   id           Int @id @default(autoincrement())
   userId       Int
   categoryId   Int
-  sourceTypeId Int
+  providerId Int
 
   category   category   @relation(fields: [categoryId], references: [id])
-  sourceType sourceType @relation(fields: [sourceTypeId], references: [id])
+  provider provider @relation(fields: [providerId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, categoryId, sourceTypeId])
+  @@unique([userId, categoryId, providerId])
 }
 
 model rss {
@@ -93,8 +93,8 @@ model rss {
   isActive    Boolean?  @default(true)
   createdAt   DateTime? @default(now()) @db.Timestamp(6)
   updatedAt   DateTime? @default(now()) @db.Timestamp(6)
-  sourceTypeId Int
-  sourceType sourceType @relation(fields: [sourceTypeId], references: [id])
+  providerId Int
+  provider provider @relation(fields: [providerId], references: [id])
 }
 
 model user {

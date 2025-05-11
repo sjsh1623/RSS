@@ -2,13 +2,13 @@ model userCategoryPreference {
   id           Int @id @default(autoincrement())
   userId       Int
   categoryId   Int
-  sourceTypeId Int
+  providerId Int
 
   category   category   @relation(fields: [categoryId], references: [id])
-  sourceType sourceType @relation(fields: [sourceTypeId], references: [id])
+  provider provider @relation(fields: [providerId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, categoryId, sourceTypeId])
+  @@unique([userId, categoryId, providerId])
 }

@@ -1,7 +1,8 @@
 export interface FeedConfig {
     id: number;
     url: string;
-    sourceTypeName: string;
-    sourceTypeId: number,
+    providerId: number;
+    providerName: string,
+    providerType: string,
     language: string;
 }

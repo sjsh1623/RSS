@@ -5,7 +5,7 @@ export class Article {
     public readonly urlHash: string,
     public readonly title: string,
     public readonly pubDate: Date,
-    public readonly sourceTypeId: number,
+    public readonly providerId: number,
     public readonly category: string,
     public readonly language: string,
     public readonly shortSummary: string,

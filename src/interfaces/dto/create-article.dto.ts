@@ -23,13 +23,13 @@ export class CreateArticleDto {
     description: '기사 제공 출처',
     example: '연합뉴스',
   })
-  sourceTypeName!: string;
+  typeName!: string;
 
   @ApiProperty({
     description: '기사 제공 출처의 키 값',
     example: '5',
   })
-  sourceTypeID!: string;
+  providerId!: string;
 
 
   @ApiProperty({

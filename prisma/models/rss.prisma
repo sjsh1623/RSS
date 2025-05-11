@@ -5,6 +5,6 @@ model rss {
   isActive    Boolean?  @default(true)
   createdAt   DateTime? @default(now()) @db.Timestamp(6)
   updatedAt   DateTime? @default(now()) @db.Timestamp(6)
-  sourceTypeId Int
-  sourceType sourceType @relation(fields: [sourceTypeId], references: [id])
+  providerId Int
+  provider provider @relation(fields: [providerId], references: [id])
 }

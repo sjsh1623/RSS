@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import Parser from 'rss-parser';
 import { FeedProvider } from '@/domain/integration/feed-provider.gateway';
+import { FeedItem } from '@/domain/integration/feed-item.interface';
+import Parser from 'rss-parser';
 
 @Injectable()
 export class RssFeedProvider implements FeedProvider {
-  private parser = new Parser();
+    private parser = new Parser();
 
-  supports(type: string): boolean {
-    return type === 'RSS';
-  }
+    supports(providerType: string): boolean {
+        return providerType === 'news';    // or whatever your RSS type is
+    }
 
-  async fetch(config: { url: string; sourceTypeName: string; language: string; [key: string]: any }) {
-    const feed = await this.parser.parseURL(config.url);
-    return feed.items.map(item => ({
-      url: item.link || '',
-      title: item.title || '',
-      pubDate: item.pubDate || '',
-      sourceTypeId: item.sourceId || '',
-      sourceTypeName: config.sourceTypeName,
-      content: item.content || item.contentSnippet || '',
-      imageUrl: item.enclosure?.url || '',
-      language: config.language,
-    }));
-  }
+    async fetch(config: {
+        url: string;
+        providerId: number;
+        providerName: string;
+        providerType: string;
+        language: string;
+    }): Promise<FeedItem[]> {
+        const feed = await this.parser.parseURL(config.url);
+        return feed.items.map(item => ({
+            url:      item.link!,
+            title:    item.title!,
+            pubDate:  item.pubDate || '',
+            providerId:   config.providerId,
+            providerName: config.providerName,
+            providerType: config.providerType,
+            content:     item.content || '',
+            imageUrl:    (item.enclosure && item.enclosure.url) || '',
+            language:    config.language,
+        }));
+    }
 }

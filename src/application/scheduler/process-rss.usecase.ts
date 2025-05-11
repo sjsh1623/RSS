@@ -65,9 +65,9 @@ export class ProcessRssUseCase {
 
 
     private async handleConfig(config: FeedConfig): Promise<void> {
-        const provider = this.feedProviders.find(p => p.supports(config.sourceTypeName));
+        const provider = this.feedProviders.find(p => p.supports(config.providerName));
         if (!provider) {
-            this.logger.warn(`No provider for feed type: ${config.sourceTypeName}`);
+            this.logger.warn(`No provider for feed type: ${config.providerName}`);
             return;
         }
 
@@ -90,7 +90,7 @@ export class ProcessRssUseCase {
                     url: item.url,
                     title: item.title,
                     pubDate: new Date(item.pubDate),
-                    sourceTypeId : item.sourceTypeId,
+                    providerId : item.providerId,
                     content: item.content,
                     imageUrl: item.imageUrl,
                     language: item.language,
