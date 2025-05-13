@@ -88,8 +88,8 @@ export class ArticleRepositoryImpl implements IArticleRepository {
         ));
     }
 
-    async findByCategory(category: string): Promise<Article[]> {
-        const rs: any[] = await this.prisma.article.findMany({where: {category}});
+    async findByCategory(categoryId: number): Promise<Article[]> {
+        const rs: any[] = await this.prisma.article.findMany({where: {categoryId}});
         return rs.map(r => new Article(
             r.id,
             r.url,

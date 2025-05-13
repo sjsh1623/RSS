@@ -20,7 +20,7 @@ export class ArticleDto {
   typeName!: string;
 
   @ApiProperty({ description: '분류된 카테고리', example: 'tech' })
-  category!: string;
+  categoryId!: number;
 
   @ApiProperty({ description: '언어', example: 'korean' })
   language!: string;

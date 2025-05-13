@@ -9,7 +9,7 @@ export class ArticleMapper {
     dto.title = article.title;
     dto.pubDate = article.pubDate;
     dto.providerId = article.providerId;
-    dto.category = article.category;
+    dto.categoryId = article.categoryId;
     dto.language = article.language;
     dto.shortSummary = article.shortSummary;
     dto.longSummary = article.longSummary;

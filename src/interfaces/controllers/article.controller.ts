@@ -23,8 +23,8 @@ export class ArticleController {
     }
 
     @Get()
-    findAll(@Query('category') category?: string): Promise<ArticleDto[]> {
-        return this.listArticles.execute(category);
+    findAll(@Query('category') categoryId?: number): Promise<ArticleDto[]> {
+        return this.listArticles.execute(categoryId);
     }
 
     @Get('search')

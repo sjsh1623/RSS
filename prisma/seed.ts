@@ -1,5 +1,6 @@
 // prisma/seed.js
-import { PrismaClient } from '@prisma/client'
+import {PrismaClient} from '@prisma/client'
+
 const prisma = new PrismaClient()
 
 async function main() {
@@ -19,9 +20,10 @@ async function main() {
     // 2) Categories
     await prisma.category.createMany({
         data: [
-            {name: 'IT/기술', code: 'tech'},
-            {name: '경제', code: 'economy'},
-            {name: '정치', code: 'politics'},
+            {id: 1, name: 'IT/기술'},
+            {id: 2, name: '경제'},
+            {id: 3, name: '정치'},
+            {id: 4, name: 'Mock Category'},
         ],
         skipDuplicates: true,
     });

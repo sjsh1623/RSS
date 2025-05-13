@@ -4,7 +4,7 @@ import {Article} from "@/domain/article/entities/article.entity";
 import {ILlmService} from "@/domain/llm/services/llm-service.interface";
 import {hashUrl} from "@/shared/utils/hash.util";
 import {EmbeddingService} from "@/infrastructure/external/embedding/embedding.service";
-import {ARTICLE_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
+import {ARTICLE_REPOSITORY, CATEGORY_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
 import {LLM_SERVICE} from "@/infrastructure/external/llm/llm-service.token";
 import {ICategoryRepository} from "@/domain/category/repositories/category.repository.interface";
 
@@ -14,12 +14,15 @@ export class SaveArticleUseCase {
     constructor(
         @Inject(ARTICLE_REPOSITORY)
         private readonly articleRepo: IArticleRepository,
-        private readonly categoryRepo: ICategoryRepository,
+
         @Inject(LLM_SERVICE)
         private readonly llmService: ILlmService,
+
+        @Inject(CATEGORY_REPOSITORY)
+        private readonly categoryRepo: ICategoryRepository,
+
         private readonly embeddingService: EmbeddingService,
-    ) {
-    }
+    ) {}
 
     async execute(raw: {
         url: string;

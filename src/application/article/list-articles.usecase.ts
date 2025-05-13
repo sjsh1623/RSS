@@ -12,8 +12,8 @@ export class ListArticlesUseCase {
       private readonly repo: IArticleRepository
   ) {}
 
-  async execute(category?: string): Promise<ArticleDto[]> {
-    const articles = category ? await this.repo.findByCategory(category) : await this.repo.findAll();
+  async execute(categoryId?: number): Promise<ArticleDto[]> {
+    const articles = categoryId ? await this.repo.findByCategory(categoryId) : await this.repo.findAll();
     return articles.map(ArticleMapper.toDto);
   }
 }

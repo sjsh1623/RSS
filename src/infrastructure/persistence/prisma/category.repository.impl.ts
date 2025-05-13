@@ -34,7 +34,7 @@ export class CategoryRepositoryImpl implements ICategoryRepository {
     }
 
     async findByName(name: string): Promise<Category | null> {
-        const r = await this.prisma.category.findUnique({
+        const r = await this.prisma.category.findFirst({
             where: {name},
         });
         if (!r) return null;
