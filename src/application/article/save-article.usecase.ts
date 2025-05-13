@@ -6,13 +6,15 @@ import {hashUrl} from "@/shared/utils/hash.util";
 import {EmbeddingService} from "@/infrastructure/external/embedding/embedding.service";
 import {ARTICLE_REPOSITORY} from "@/infrastructure/persistence/persistence.module";
 import {LLM_SERVICE} from "@/infrastructure/external/llm/llm-service.token";
+import {ICategoryRepository} from "@/domain/category/repositories/category.repository.interface";
 
 
 @Injectable()
 export class SaveArticleUseCase {
     constructor(
         @Inject(ARTICLE_REPOSITORY)
-        private readonly repo: IArticleRepository,
+        private readonly articleRepo: IArticleRepository,
+        private readonly categoryRepo: ICategoryRepository,
         @Inject(LLM_SERVICE)
         private readonly llmService: ILlmService,
         private readonly embeddingService: EmbeddingService,
@@ -30,6 +32,9 @@ export class SaveArticleUseCase {
     }): Promise<Article> {
         // 1) LLM으로 요약 및 카테고리 추출
         const {shortSummary, longSummary, category} = await this.llmService.analyze(raw.content);
+        // 1.5) Category 조회
+        const categoryId = await this.categoryRepo.findByName(category).then(c => c?.id);
+        if (!categoryId) throw new Error(`Category ${category} not found`);
         // 2) URL 해시화
         const urlHash = hashUrl(raw.url);
         // 3) 임베딩 생성
@@ -42,7 +47,7 @@ export class SaveArticleUseCase {
             raw.title,
             raw.pubDate,
             raw.providerId,
-            category,
+            categoryId,
             raw.language,
             shortSummary,
             longSummary,
@@ -52,6 +57,6 @@ export class SaveArticleUseCase {
             embedding,
         );
         // 5) 저장
-        return this.repo.create(article);
+        return this.articleRepo.create(article);
     }
 }

@@ -1,5 +1,5 @@
-import { RssSource } from '../entities/rss-source.entity';
+import {FeedConfig} from "@/domain/integration/feed-config.interface";
 
 export interface IReadRssSourceRepository {
-  findAllActive(): Promise<RssSource[]>;
+  findAllActive(): Promise<FeedConfig[]>;
 }

@@ -5,7 +5,6 @@ model article {
   title        String
   pubDate      DateTime                 @db.Timestamp(6)
   source       String
-  category     String
   language     String
   shortSummary String
   longSummary  String
@@ -14,7 +13,9 @@ model article {
   createdAt    DateTime                 @default(now()) @db.Timestamp(6)
   embedding    Unsupported("vector")?
   context_tsv  Unsupported("tsvector")?
+  categoryId   Int
 
-  @@index([category], map: "idx_category_article")
+  provider category @relation(fields: [categoryId], references: [id])
+
   @@index([language], map: "idx_language_article")
 }

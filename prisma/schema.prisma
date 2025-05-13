@@ -20,7 +20,6 @@ model article {
   title        String
   pubDate      DateTime                 @db.Timestamp(6)
   source       String
-  category     String
   language     String
   shortSummary String
   longSummary  String
@@ -29,8 +28,10 @@ model article {
   createdAt    DateTime                 @default(now()) @db.Timestamp(6)
   embedding    Unsupported("vector")?
   context_tsv  Unsupported("tsvector")?
+  categoryId   Int
 
-  @@index([category], map: "idx_category_article")
+  provider category @relation(fields: [categoryId], references: [id])
+
   @@index([language], map: "idx_language_article")
 }
 
@@ -55,29 +56,30 @@ model token {
 
 model category {
   id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   preferences userCategoryPreference[]
+  article     article[]
 }
 
 model provider {
-  id   Int    @id @default(autoincrement())
-  name String
-  type String
+  id          Int                      @id @default(autoincrement())
+  name        String
+  type        String
   preferences userCategoryPreference[]
   rss         rss[]
 }
 
+
 model userCategoryPreference {
-  id           Int @id @default(autoincrement())
-  userId       Int
-  categoryId   Int
+  id         Int @id @default(autoincrement())
+  userId     Int
+  categoryId Int
   providerId Int
 
-  category   category   @relation(fields: [categoryId], references: [id])
+  category category @relation(fields: [categoryId], references: [id])
   provider provider @relation(fields: [providerId], references: [id])
 
   createdAt DateTime @default(now())
@@ -85,6 +87,7 @@ model userCategoryPreference {
 
   @@unique([userId, categoryId, providerId])
 }
+
 
 model rss {
   id           Int       @id(map: "rss_source_pkey") @default(autoincrement())

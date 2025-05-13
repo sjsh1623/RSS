@@ -1,12 +1,25 @@
 // src/infrastructure/external/llm/llm.module.ts
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CohereLlmService } from './cohere-llm.service';
-import { LLM_SERVICE }      from './llm-service.token';  // 토큰 정의
+import { MockLlmService }  from './mock-llm.service';
+import { LLM_SERVICE }      from './llm-service.token';
 
 @Module({
-  providers: [
-    { provide: LLM_SERVICE, useClass: CohereLlmService },
-  ],
-  exports: [LLM_SERVICE],  // 토큰을 외부에 노출해야 ArticleModule에서 import 가능
+    imports: [ConfigModule],       // ConfigService 를 쓰기 위해
+    providers: [
+        {
+            provide: LLM_SERVICE,
+            useFactory: (config: ConfigService) => {
+                // boolean 처리를 안정적으로
+                const useMock = config.get<string>('LLM_MOCK') === 'true';
+                return useMock
+                    ? new MockLlmService()
+                    : new CohereLlmService();
+            },
+            inject: [ConfigService],
+        },
+    ],
+    exports: [LLM_SERVICE],
 })
 export class LlmModule {}

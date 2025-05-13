@@ -14,10 +14,8 @@ export class CategoryRepositoryImpl implements ICategoryRepository {
             new Category(
                 r.id,
                 r.name,
-                r.code,
                 r.createdAt,
                 r.updatedAt,
-                [] // 아직 서브카테고리가 없으므로 빈 배열
             )
         );
     }
@@ -30,39 +28,46 @@ export class CategoryRepositoryImpl implements ICategoryRepository {
         return new Category(
             r.id,
             r.name,
-            r.code,
             r.createdAt,
             r.updatedAt,
-            [] // 빈 배열
         );
     }
 
-    async create(name: string, code: string): Promise<Category> {
+    async findByName(name: string): Promise<Category | null> {
+        const r = await this.prisma.category.findUnique({
+            where: {name},
+        });
+        if (!r) return null;
+        return new Category(
+            r.id,
+            r.name,
+            r.createdAt,
+            r.updatedAt,
+        );
+    }
+
+    async create(name: string): Promise<Category> {
         const r = await this.prisma.category.create({
-            data: {name, code},
+            data: {name},
         });
         return new Category(
             r.id,
             r.name,
-            r.code,
             r.createdAt,
             r.updatedAt,
-            [] // 새로 생성된 카테고리에는 서브가 없음
         );
     }
 
-    async update(id: number, name: string, code: string): Promise<Category> {
+    async update(id: number, name: string): Promise<Category> {
         const r = await this.prisma.category.update({
             where: {id},
-            data: {name, code}, // origin 필드는 DB에 없음
+            data: {name}, // origin 필드는 DB에 없음
         });
         return new Category(
             r.id,
             r.name,
-            r.code,
             r.createdAt,
             r.updatedAt,
-            [] // 여기도 빈 배열
         );
     }
 

@@ -3,7 +3,7 @@
 import { FeedItem } from './feed-item.interface';
 
 export interface FeedProvider {
-  supports(providerName: string): boolean;
+  supports(providerType: string): boolean;
   fetch(config: {
     url: string;
     providerId: number;

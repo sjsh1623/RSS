@@ -6,7 +6,7 @@ export class Article {
     public readonly title: string,
     public readonly pubDate: Date,
     public readonly providerId: number,
-    public readonly category: string,
+    public readonly categoryId: number,
     public readonly language: string,
     public readonly shortSummary: string,
     public readonly longSummary: string,
