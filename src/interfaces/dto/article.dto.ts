@@ -42,4 +42,7 @@ export class ArticleDto {
 
   @ApiProperty({ description: '임베딩 벡터', type: [Number], nullable: true })
   embedding!: number[] | null;
+
+  @ApiProperty({ description: '조회 수', example: 100 })
+  views!: number;
 }

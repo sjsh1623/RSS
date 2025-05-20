@@ -6,7 +6,8 @@ set -e
 # 2) 최신 마이그레이션 배포
 if [ "$NODE_ENV" = "development" ]; then
   echo "[entrypoint] Dev: prisma migrate dev"
-  npx prisma migrate dev --name init
+  npx prisma migrate dev --name add-views-to-article
+# npx prisma migrate dev --name init
   npx prisma db seed
 else
   echo "[entrypoint] Prod: prisma migrate deploy"

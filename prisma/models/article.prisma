@@ -13,6 +13,7 @@ model article {
   createdAt    DateTime                 @default(now()) @db.Timestamp(6)
   embedding    Unsupported("vector")?
   context_tsv  Unsupported("tsvector")?
+  views        Int       @default(0)
   categoryId   Int
 
   provider category @relation(fields: [categoryId], references: [id])

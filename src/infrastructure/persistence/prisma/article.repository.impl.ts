@@ -136,5 +136,12 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.embedding,
         ));
     }
+
+    async incrementViews(id: number): Promise<void> {
+        await this.prisma.article.update({
+            where: { id },
+            data:  { views: { increment: 1 } },
+        });
+    }
 }
 
