@@ -17,6 +17,7 @@ export class ArticleMapper {
     dto.context = article.context;
     dto.createdAt = article.createdAt;
     dto.embedding = article.embedding;
+    dto.views = article.views;
     return dto;
   }
 }

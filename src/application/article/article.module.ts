@@ -10,6 +10,8 @@ import {ListArticlesUseCase} from './list-articles.usecase';
 import {SearchArticlesUseCase} from './search-articles.usecase';
 import {ArticleController} from "@/interfaces/controllers/article.controller";
 import {PersistenceModule} from "@/infrastructure/persistence/persistence.module";
+import {GetTrendingArticlesByCategoryUseCase} from "@/application/article/get-trending-articles.usecase";
+import {IncrementArticleViewsUseCase} from "@/application/article/increment-views.usecase";
 
 @Module({
     imports: [PrismaModule, RedisModule, LlmModule, EmbeddingModule, PersistenceModule],
@@ -19,12 +21,16 @@ import {PersistenceModule} from "@/infrastructure/persistence/persistence.module
         GetArticleUseCase,
         ListArticlesUseCase,
         SearchArticlesUseCase,
+        IncrementArticleViewsUseCase,
+        GetTrendingArticlesByCategoryUseCase,
     ],
     exports: [
         SaveArticleUseCase,
         GetArticleUseCase,
         ListArticlesUseCase,
         SearchArticlesUseCase,
+        IncrementArticleViewsUseCase,
+        GetTrendingArticlesByCategoryUseCase,
     ],
 })
 export class ArticleModule {

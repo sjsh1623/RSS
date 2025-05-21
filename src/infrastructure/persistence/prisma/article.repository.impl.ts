@@ -44,6 +44,7 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.context,
             r.createdAt,
             r.embedding,
+            r.views
         );
     }
 
@@ -65,6 +66,7 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.context,
             r.createdAt,
             r.embedding,
+            r.views
         );
     }
 
@@ -85,6 +87,7 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.context,
             r.createdAt,
             r.embedding,
+            r.views
         ));
     }
 
@@ -105,6 +108,7 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.context,
             r.createdAt,
             r.embedding,
+            r.views
         ));
     }
 
@@ -134,14 +138,67 @@ export class ArticleRepositoryImpl implements IArticleRepository {
             r.context,
             r.createdAt,
             r.embedding,
+            r.views
         ));
     }
 
     async incrementViews(id: number): Promise<void> {
         await this.prisma.article.update({
-            where: { id },
-            data:  { views: { increment: 1 } },
+            where: {id},
+            data: {views: {increment: 1}},
         });
+    }
+
+    async findTopByViews(limit: number = 10): Promise<Article[]> {
+        const result = await this.prisma.article.findMany({
+            orderBy: {views: 'desc'},
+            take: limit,
+        });
+        return result.map(r => new Article(
+            r.id,
+            r.url,
+            r.urlHash,
+            r.title,
+            r.pubDate,
+            r.source,
+            r.categoryId,
+            r.language,
+            r.shortSummary,
+            r.longSummary,
+            r.imageUrl,
+            r.context,
+            r.createdAt,
+            r.embedding,
+            r.views
+        ));
+    }
+
+    async findTopByViewsByCategory(
+        categoryId: number,
+        limit: number = 10,
+    ): Promise<Article[]> {
+        const result = await this.prisma.article.findMany({
+            where: {categoryId},
+            orderBy: {views: 'desc'},
+            take: limit,
+        });
+        return result.map(r => new Article(
+            r.id,
+            r.url,
+            r.urlHash,
+            r.title,
+            r.pubDate,
+            r.source,
+            r.categoryId,
+            r.language,
+            r.shortSummary,
+            r.longSummary,
+            r.imageUrl,
+            r.context,
+            r.createdAt,
+            r.embedding,
+            r.views
+        ));
     }
 }
 

@@ -14,5 +14,6 @@ export class Article {
     public readonly context: string | null,
     public readonly createdAt: Date,
     public readonly embedding: number[] | null,
+    public readonly views: number,
   ) {}
 }

@@ -1,10 +1,12 @@
 import {Controller, Get, Param, Query, ParseIntPipe} from '@nestjs/common';
-import {ApiTags} from "@nestjs/swagger";
+import {ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {GetArticleUseCase} from '@/application/article/get-article.usecase';
 import {ListArticlesUseCase} from '@/application/article/list-articles.usecase';
 import {ArticleDto} from '../dto/article.dto';
 import {SearchArticlesUseCase} from "@/application/article/search-articles.usecase";
 import {IncrementArticleViewsUseCase} from "@/application/article/increment-views.usecase";
+import {GetTrendingArticlesByCategoryUseCase} from "@/application/article/get-trending-articles.usecase";
+import {TrendingArticleResponseDto} from "@/interfaces/dto/trending-article-response.dto";
 
 
 @ApiTags('articles')
@@ -15,6 +17,7 @@ export class ArticleController {
         private readonly listArticles: ListArticlesUseCase,
         private readonly searchArticles: SearchArticlesUseCase,
         private readonly incrementViews: IncrementArticleViewsUseCase,
+        private readonly getTrending: GetTrendingArticlesByCategoryUseCase,
     ) {
     }
 
@@ -51,4 +54,29 @@ export class ArticleController {
         };
     }
 
+
+    @Get('category/:categoryId/trending')
+    @ApiOperation({summary: '카테고리별 조회수 상위 N개 글 조회'})
+    @ApiParam({name: 'categoryId', type: Number, example: 3})
+    @ApiQuery({name: 'limit', required: false, example: 10})
+    @ApiResponse({
+        status: 200,
+        description: '인기도 상위 글 리스트',
+        type: TrendingArticleResponseDto,
+        isArray: true,
+    })
+    async getTrendingByCategory(
+        @Param('categoryId', ParseIntPipe) categoryId: number,
+        @Query('limit', ParseIntPipe) limit = 10,
+    ): Promise<TrendingArticleResponseDto[]> {
+        const articles = await this.getTrending.execute(categoryId, limit);
+        return articles.map((a, idx) => ({
+            id: a.id,
+            title: a.title,
+            url: a.url,
+            pubDate: a.pubDate,
+            views: a.views,
+            rank: idx + 1,
+        }));
+    }
 }
