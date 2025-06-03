@@ -1,54 +1,37 @@
 version: '3.8'
-
 services:
-  postgres:
-    image: ankane/pgvector:latest
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: katchup
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: feeds
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+
+  api-server:
+    build: ./api-server
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
+
+  batch-server:
+    build: ./batch-server
+    depends_on:
+      - db
+      - embedding
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
 
   embedding:
-    build:
-      context: ./embedding
+    build: ./embedding
     ports:
       - "8000:8000"
 
-  redis:
-    image: redis:7
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisdata:/data
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: rss-backend
-    restart: always
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SHADOW_DATABASE_URL: ${SHADOW_DATABASE_URL}
-      NODE_ENV: ${NODE_ENV}
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
-      - redis
-      - embedding
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    entrypoint: ["sh", "/usr/src/app/entrypoint.sh"]
-
 volumes:
-  pgdata:
-  redisdata:
+  db_data: 
