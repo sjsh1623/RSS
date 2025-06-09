@@ -1,0 +1,283 @@
+Compose now can delegate build to bake for better performances
+Just set COMPOSE_BAKE=true
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [api-server internal] load build definition from Dockerfile
+#1 transferring dockerfile: 353B done
+#1 WARN: FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 2)
+#1 DONE 0.0s
+
+#2 [embedding internal] load build definition from Dockerfile
+#2 transferring dockerfile: 266B done
+#2 DONE 0.0s
+
+#3 [api-server auth] library/amazoncorretto:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [embedding auth] library/python:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#5 [api-server internal] load metadata for docker.io/library/amazoncorretto:21
+#5 ...
+
+#6 [embedding internal] load metadata for docker.io/library/python:3.10-slim
+#6 DONE 1.6s
+
+#5 [api-server internal] load metadata for docker.io/library/amazoncorretto:21
+#5 DONE 1.6s
+
+#7 [embedding internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [api-server internal] load .dockerignore
+#8 transferring context: 2B done
+#8 DONE 0.0s
+
+#9 [embedding internal] load build context
+#9 transferring context: 205B done
+#9 DONE 0.0s
+
+#10 [embedding 1/5] FROM docker.io/library/python:3.10-slim@sha256:2ee0fb8794bf82af1b2db168ada5869b4c27d17720dd3b155b56c111fb4a38ae
+#10 resolve docker.io/library/python:3.10-slim@sha256:2ee0fb8794bf82af1b2db168ada5869b4c27d17720dd3b155b56c111fb4a38ae 0.0s done
+#10 DONE 0.0s
+
+#11 [api-server builder 1/4] FROM docker.io/library/amazoncorretto:21@sha256:d51610ff3c790833e308318d25424361a69680a4b7968329b73012ad502ab936
+#11 resolve docker.io/library/amazoncorretto:21@sha256:d51610ff3c790833e308318d25424361a69680a4b7968329b73012ad502ab936 0.0s done
+#11 DONE 0.0s
+
+#12 [embedding 3/5] COPY requirements.txt ./
+#12 CACHED
+
+#13 [embedding 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#13 CACHED
+
+#14 [embedding 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [embedding 5/5] COPY . .
+#15 CACHED
+
+#16 [api-server internal] load build context
+#16 transferring context: 8.25kB done
+#16 DONE 0.0s
+
+#17 [api-server builder 3/4] COPY . .
+#17 CACHED
+
+#18 [api-server builder 2/4] WORKDIR /app
+#18 CACHED
+
+#19 [api-server builder 4/4] RUN ./gradlew bootJar
+#19 CACHED
+
+#20 [api-server stage-1 3/3] COPY --from=builder /app/build/libs/katchup-backend-0.0.1-SNAPSHOT.jar app.jar
+#20 CACHED
+
+#21 [api-server] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:aeb6b08e9d5b21419ac53fbc17fd34cd9d3b3055913e895185746c3fd1aa6f57 done
+#21 exporting config sha256:de1b89c9d37ffe0c077b5205e7936a4d28c3bff0d6684bc5254195240981b409 done
+#21 exporting attestation manifest sha256:8c1d5eb26e586fd284302041010e50bcd07928471faac4608699a9d9f4a0bf9d 0.0s done
+#21 exporting manifest list sha256:cb9d477d2b2d81bffbbd13275bbf67caaf88e8c23e2bcc089687afccdfd2675c done
+#21 naming to docker.io/library/rss-api-server:latest done
+#21 unpacking to docker.io/library/rss-api-server:latest
+#21 unpacking to docker.io/library/rss-api-server:latest 0.3s done
+#21 DONE 0.4s
+
+#22 [api-server] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#23 [embedding] exporting to image
+#23 exporting layers done
+#23 exporting manifest sha256:14a70b2c70fad638080120d82af9f2c30cca82e58cd011d741978f5cfa41968c done
+#23 exporting config sha256:a51a81c8e9cbc6486c3c381786a7de73bd2acf66ceffeab7fe25269835c2db1a done
+#23 exporting attestation manifest sha256:783bf28341c0521053a5c6dd50505395250f0b3a40e64ad344304665bf7d07c4 done
+#23 exporting manifest list sha256:c5b2eaa1b440023862cfcc502119454b4ba54863e73117e1acf01aba4216dde0 done
+#23 naming to docker.io/library/rss-embedding:latest done
+#23 unpacking to docker.io/library/rss-embedding:latest
+#23 unpacking to docker.io/library/rss-embedding:latest 4.5s done
+#23 DONE 4.5s
+
+#24 [embedding] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#25 [scheduler-server internal] load build definition from Dockerfile
+#25 transferring dockerfile: 358B done
+#25 DONE 0.0s
+
+#26 [scheduler-server auth] library/eclipse-temurin:pull token for registry-1.docker.io
+#26 DONE 0.0s
+
+#27 [scheduler-server internal] load metadata for docker.io/library/eclipse-temurin:17-jdk
+#27 DONE 1.0s
+
+#28 [scheduler-server internal] load .dockerignore
+#28 transferring context: 2B done
+#28 DONE 0.0s
+
+#29 [scheduler-server internal] load build context
+#29 transferring context: 2.27kB done
+#29 DONE 0.0s
+
+#30 [scheduler-server 1/3] FROM docker.io/library/eclipse-temurin:17-jdk@sha256:fc78e7f03b5d94665348956ed3d29496ffd3fc39ca839e56249776f85bb6dafb
+#30 resolve docker.io/library/eclipse-temurin:17-jdk@sha256:fc78e7f03b5d94665348956ed3d29496ffd3fc39ca839e56249776f85bb6dafb 0.0s done
+#30 DONE 0.0s
+
+#31 [scheduler-server 2/3] WORKDIR /app
+#31 CACHED
+
+#32 [scheduler-server 3/3] COPY . .
+#32 CACHED
+
+#33 [scheduler-server] exporting to image
+#33 exporting layers done
+#33 exporting manifest sha256:66a4e09dfe59035eb40175583485e848533c2399516766fc120d54a19878d3fd done
+#33 exporting config sha256:32d738cff7f0fcafd2cf2fd3c97ca1c60060d217cccaa44130108847809b0c44 done
+#33 exporting attestation manifest sha256:69546f67faf45a50cc6ac0d86a68dcd8b24b94ce2c152eb5d9040aa9c9e362cb done
+#33 exporting manifest list sha256:191cb779393abbb8da3f058a5c09816c7660baa08ab05ddf7fd9aa668cc58b0f done
+#33 naming to docker.io/library/rss-scheduler-server:latest done
+#33 unpacking to docker.io/library/rss-scheduler-server:latest 0.0s done
+#33 DONE 0.0s
+
+#34 [scheduler-server] resolving provenance for metadata file
+#34 DONE 0.0s
+db-1                | The files belonging to this database system will be owned by user "postgres".
+db-1                | This user must also own the server process.
+db-1                | 
+db-1                | The database cluster will be initialized with locale "en_US.utf8".
+db-1                | The default database encoding has accordingly been set to "UTF8".
+db-1                | The default text search configuration will be set to "english".
+db-1                | 
+db-1                | Data page checksums are disabled.
+db-1                | 
+db-1                | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+db-1                | creating subdirectories ... ok
+db-1                | selecting dynamic shared memory implementation ... posix
+db-1                | selecting default max_connections ... 100
+db-1                | selecting default shared_buffers ... 128MB
+db-1                | selecting default time zone ... Etc/UTC
+db-1                | creating configuration files ... ok
+db-1                | running bootstrap script ... ok
+scheduler-server-1  | Jun 08, 2025 8:20:46 AM java.util.prefs.FileSystemPreferences$1 run
+scheduler-server-1  | INFO: Created user preferences directory.
+db-1                | performing post-bootstrap initialization ... ok
+db-1                | syncing data to disk ... ok
+db-1                | 
+db-1                | initdb: warning: enabling "trust" authentication for local connections
+db-1                | 
+db-1                | Success. You can now start the database server using:
+db-1                | 
+db-1                |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+db-1                | 
+db-1                | initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+db-1                | waiting for server to start....2025-06-08 08:20:47.431 UTC [47] LOG:  starting PostgreSQL 15.0 (Debian 15.0-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+db-1                | 2025-06-08 08:20:47.433 UTC [47] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1                | 2025-06-08 08:20:47.439 UTC [50] LOG:  database system was shut down at 2025-06-08 08:20:47 UTC
+db-1                | 2025-06-08 08:20:47.444 UTC [47] LOG:  database system is ready to accept connections
+db-1                |  done
+db-1                | server started
+db-1                | CREATE DATABASE
+db-1                | 
+db-1                | 
+db-1                | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+db-1                | 
+db-1                | waiting for server to shut down....2025-06-08 08:20:47.612 UTC [47] LOG:  received fast shutdown request
+db-1                | 2025-06-08 08:20:47.616 UTC [47] LOG:  aborting any active transactions
+db-1                | 2025-06-08 08:20:47.618 UTC [47] LOG:  background worker "logical replication launcher" (PID 53) exited with exit code 1
+db-1                | 2025-06-08 08:20:47.620 UTC [48] LOG:  shutting down
+db-1                | 2025-06-08 08:20:47.621 UTC [48] LOG:  checkpoint starting: shutdown immediate
+db-1                | 2025-06-08 08:20:47.684 UTC [48] LOG:  checkpoint complete: wrote 918 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.021 s, sync=0.038 s, total=0.064 s; sync files=250, longest=0.013 s, average=0.001 s; distance=4217 kB, estimate=4217 kB
+db-1                | 2025-06-08 08:20:47.687 UTC [47] LOG:  database system is shut down
+db-1                |  done
+db-1                | server stopped
+db-1                | 
+db-1                | PostgreSQL init process complete; ready for start up.
+db-1                | 
+db-1                | 2025-06-08 08:20:47.731 UTC [1] LOG:  starting PostgreSQL 15.0 (Debian 15.0-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+db-1                | 2025-06-08 08:20:47.731 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1                | 2025-06-08 08:20:47.731 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1                | 2025-06-08 08:20:47.742 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1                | 2025-06-08 08:20:47.748 UTC [62] LOG:  database system was shut down at 2025-06-08 08:20:47 UTC
+api-server-1        | 
+api-server-1        |   .   ____          _            __ _ _
+api-server-1        |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+api-server-1        | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+api-server-1        |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+api-server-1        |   '  |____| .__|_| |_|_| |_\__, | / / / /
+api-server-1        |  =========|_|==============|___/=/_/_/_/
+api-server-1        | 
+db-1                | 2025-06-08 08:20:47.753 UTC [1] LOG:  database system is ready to accept connections
+api-server-1        |  :: Spring Boot ::                (v3.5.0)
+api-server-1        | 
+api-server-1        | 2025-06-08T08:20:47.826Z  INFO 1 --- [katchup-backend] [           main] com.katchup.KatchupBackendApplication    : Starting KatchupBackendApplication v0.0.1-SNAPSHOT using Java 21.0.7 with PID 1 (/app/app.jar started by root in /app)
+api-server-1        | 2025-06-08T08:20:47.828Z  INFO 1 --- [katchup-backend] [           main] com.katchup.KatchupBackendApplication    : The following 1 profile is active: "prod"
+scheduler-server-1  | |  Welcome to JShell -- Version 17.0.15
+scheduler-server-1  | |  For an introduction type: /help intro
+scheduler-server-1  | 
+[Kscheduler-server-1 exited with code 0
+api-server-1        | 2025-06-08T08:20:48.854Z  INFO 1 --- [katchup-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+api-server-1        | 2025-06-08T08:20:48.898Z  INFO 1 --- [katchup-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 3 JPA repository interfaces.
+api-server-1        | 2025-06-08T08:20:49.268Z  INFO 1 --- [katchup-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+api-server-1        | 2025-06-08T08:20:49.277Z  INFO 1 --- [katchup-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+api-server-1        | 2025-06-08T08:20:49.277Z  INFO 1 --- [katchup-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.41]
+api-server-1        | 2025-06-08T08:20:49.294Z  INFO 1 --- [katchup-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+api-server-1        | 2025-06-08T08:20:49.294Z  INFO 1 --- [katchup-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1404 ms
+api-server-1        | 2025-06-08T08:20:49.468Z  INFO 1 --- [katchup-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+api-server-1        | 2025-06-08T08:20:49.595Z  INFO 1 --- [katchup-backend] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@478fb7dc
+api-server-1        | 2025-06-08T08:20:49.596Z  INFO 1 --- [katchup-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+api-server-1        | 2025-06-08T08:20:49.604Z  WARN 1 --- [katchup-backend] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Failed to initialize dependency 'flywayInitializer' of LoadTimeWeaverAware bean 'entityManagerFactory': Error creating bean with name 'flywayInitializer' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Unsupported Database: PostgreSQL 15.0
+api-server-1        | 2025-06-08T08:20:49.604Z  INFO 1 --- [katchup-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+api-server-1        | 2025-06-08T08:20:49.606Z  INFO 1 --- [katchup-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+api-server-1        | 2025-06-08T08:20:49.608Z  INFO 1 --- [katchup-backend] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+api-server-1        | 2025-06-08T08:20:49.620Z  INFO 1 --- [katchup-backend] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+api-server-1        | 
+api-server-1        | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+api-server-1        | 2025-06-08T08:20:49.630Z ERROR 1 --- [katchup-backend] [           main] o.s.boot.SpringApplication               : Application run failed
+api-server-1        | 
+api-server-1        | org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Failed to initialize dependency 'flywayInitializer' of LoadTimeWeaverAware bean 'entityManagerFactory': Error creating bean with name 'flywayInitializer' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Unsupported Database: PostgreSQL 15.0
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:328) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970) ~[spring-context-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:753) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1362) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1351) ~[spring-boot-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at com.katchup.KatchupBackendApplication.main(KatchupBackendApplication.java:9) ~[!/:0.0.1-SNAPSHOT]
+api-server-1        | 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+api-server-1        | 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+api-server-1        | 	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:102) ~[app.jar:0.0.1-SNAPSHOT]
+api-server-1        | 	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64) ~[app.jar:0.0.1-SNAPSHOT]
+api-server-1        | 	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:40) ~[app.jar:0.0.1-SNAPSHOT]
+api-server-1        | Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'flywayInitializer' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Unsupported Database: PostgreSQL 15.0
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:315) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	... 15 common frames omitted
+api-server-1        | Caused by: org.flywaydb.core.api.FlywayException: Unsupported Database: PostgreSQL 15.0
+api-server-1        | 	at org.flywaydb.core.internal.database.DatabaseTypeRegister.lambda$getDatabaseTypeForConnection$7(DatabaseTypeRegister.java:134) ~[flyway-core-11.7.2.jar!/:na]
+api-server-1        | 	at java.base/java.util.Optional.orElseThrow(Optional.java:403) ~[na:na]
+api-server-1        | 	at org.flywaydb.core.internal.database.DatabaseTypeRegister.getDatabaseTypeForConnection(DatabaseTypeRegister.java:134) ~[flyway-core-11.7.2.jar!/:na]
+api-server-1        | 	at org.flywaydb.core.internal.jdbc.JdbcConnectionFactory.<init>(JdbcConnectionFactory.java:77) ~[flyway-core-11.7.2.jar!/:na]
+api-server-1        | 	at org.flywaydb.core.FlywayExecutor.execute(FlywayExecutor.java:136) ~[flyway-core-11.7.2.jar!/:na]
+api-server-1        | 	at org.flywaydb.core.Flyway.migrate(Flyway.java:188) ~[flyway-core-11.7.2.jar!/:na]
+api-server-1        | 	at org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer.afterPropertiesSet(FlywayMigrationInitializer.java:66) ~[spring-boot-autoconfigure-3.5.0.jar!/:3.5.0]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822) ~[spring-beans-6.2.7.jar!/:6.2.7]
+api-server-1        | 	... 22 common frames omitted
+api-server-1        | 
+[Kapi-server-1 exited with code 1
+embedding-1         | INFO:     Started server process [1]
+embedding-1         | INFO:     Waiting for application startup.
+embedding-1         | INFO:     Application startup complete.
+embedding-1         | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+db-1                | 2025-06-08 08:25:47.850 UTC [60] LOG:  checkpoint starting: time
+db-1                | 2025-06-08 08:25:52.156 UTC [60] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.289 s, sync=0.007 s, total=4.307 s; sync files=12, longest=0.005 s, average=0.001 s; distance=252 kB, estimate=252 kB
