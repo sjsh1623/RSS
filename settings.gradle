@@ -1,2 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'katchup-multimodule'
-include 'common', 'api-server', 'batch-server' 
+include 'common', 'api-server', 'batch-server', 'scheduler-server' 

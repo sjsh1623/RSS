@@ -35,22 +35,23 @@ public class RssBatchService implements IRssBatchService {
                             log.warn("Embedding not found for item: {}", item.getUrl());
                             continue;
                         }
-                        Article article = Article.builder()
-                                .url(item.getUrl())
-                                .urlHash(Integer.toHexString(item.getUrl().hashCode()))
-                                .title(item.getTitle())
-                                .pubDate(LocalDateTime.parse(item.getPubDate()))
-                                .providerId(item.getProviderId())
-                                .categoryId(null)
-                                .language(item.getLanguage())
-                                .shortSummary("")
-                                .longSummary("")
-                                .imageUrl(item.getImageUrl())
-                                .context(item.getContent())
-                                .createdAt(LocalDateTime.now())
-                                .embedding(embeddingOpt.get())
-                                .views(0)
-                                .build();
+                        Article article = new Article(
+                            null,  // id
+                            item.getTitle(),
+                            item.getUrl(),
+                            Integer.toHexString(item.getUrl().hashCode()),
+                            LocalDateTime.parse(item.getPubDate()),
+                            source.getProviderId(),
+                            source.getCategoryId(),
+                            source.getLanguage(),
+                            item.getShortSummary(),
+                            item.getLongSummary(),
+                            item.getImageUrl(),
+                            item.getContext(),
+                            LocalDateTime.now(),
+                            embeddingOpt.get(),
+                            0  // views
+                        );
                         articleRepository.save(article);
                     } catch (Exception e) {
                         log.error("Failed to process FeedItem: {}", item.getUrl(), e);

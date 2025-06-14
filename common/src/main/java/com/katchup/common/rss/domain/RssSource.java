@@ -19,17 +19,19 @@ public class RssSource {
     private Long providerId;
     private String providerName;
     private String providerType;
+    private Long categoryId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @Builder
-    public RssSource(Long id, String url, String language, Long providerId, String providerName, String providerType, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public RssSource(Long id, String url, String language, Long providerId, String providerName, String providerType, Long categoryId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.url = url;
         this.language = language;
         this.providerId = providerId;
         this.providerName = providerName;
         this.providerType = providerType;
+        this.categoryId = categoryId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

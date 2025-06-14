@@ -27,7 +27,8 @@ services:
       - "8080:8080"
 
   scheduler-server:
-    build: ./scheduler-server
+    build:
+      context: .
     depends_on:
       - db
       - embedding
