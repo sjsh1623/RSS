@@ -1,6 +1,31 @@
 # RSS 프로젝트
 
-## 테이블 구조 (JPA 기반)
+RSS 피드를 수집하고 분석하여 사용자에게 맞춤형 뉴스 콘텐츠를 제공하는 서비스입니다.
+
+## 기술 스택
+
+### Backend
+- Java 17
+- Spring Boot
+- PostgreSQL
+- Flyway (데이터베이스 마이그레이션)
+- JPA/Hibernate
+
+### Frontend
+- React
+- TypeScript
+- Tailwind CSS
+
+## 프로젝트 구조
+
+```
+RSS/
+├── api-server/          # Spring Boot 백엔드 서버
+├── web-client/         # React 프론트엔드
+└── lagacy_src/         # 레거시 코드
+```
+
+## 데이터베이스 스키마
 
 ### User
 | 컬럼명        | 타입           | 제약조건                | 설명         |
@@ -49,8 +74,9 @@
 | embedding    | FLOAT8[]      |                        | 임베딩 벡터 |
 | views        | BIGINT        | NOT NULL, DEFAULT 0    | 조회수      |
 
+## 개발 환경 설정
 
-## Docker로 시작 시 테이블 자동 생성 (Flyway 기반)
+### Docker로 시작하기
 
 1. **DB, API 서버 환경변수는 docker-compose.yml에서 관리**
 2. **JPA 설정**: `spring.jpa.hibernate.ddl-auto=validate`로 두고, Flyway가 마이그레이션을 담당합니다.
@@ -65,6 +91,17 @@ docker-compose build --no-cache
 
 5. **DB 계정/비밀번호**는 docker-compose.yml과 application.properties에 맞춰주세요.
    - 기본값: user=myuser, password=mypassword, db=katchup
+
+## API 문서
+
+API 문서는 Swagger UI를 통해 제공됩니다. 서버 실행 후 다음 URL에서 확인할 수 있습니다:
+```
+http://localhost:8080/swagger-ui.html
+```
+
+## 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 있습니다.
 
 ---
 
